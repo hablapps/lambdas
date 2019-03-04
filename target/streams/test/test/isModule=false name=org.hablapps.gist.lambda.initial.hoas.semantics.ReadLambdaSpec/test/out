@@ -1,0 +1,4 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mReadLambdaSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mRead lambda expressions - initial - HOAS[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- works[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- interprets open expressions if the right environment is provided[0m[0m

@@ -1,0 +1,7 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mTypecheckSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- Int literals[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- Add expressions[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- Lambda expressions[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- App expressions[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- Poly expressions[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- Poly expressions (open)[0m[0m

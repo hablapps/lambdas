@@ -1,0 +1,10 @@
+[0m[[0m[31merror[0m] [0m[0m/Users/jserrano/Documents/lambdas/src/test/scala/lambdas/tfhoas/Examples.scala:1:1: expected class or object definition[0m
+[0m[[0m[31merror[0m] [0m[0mCurvesIdpackage lambdas[0m
+[0m[[0m[31merror[0m] [0m[0m^[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/jserrano/Documents/lambdas/src/test/scala/lambdas/tfhoas/Examples.scala:3:1: '{' expected.[0m
+[0m[[0m[31merror[0m] [0m[0mpackage hoas[0m
+[0m[[0m[31merror[0m] [0m[0m^[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/jserrano/Documents/lambdas/src/test/scala/lambdas/tfhoas/Examples.scala:5:1: '{' expected.[0m
+[0m[[0m[31merror[0m] [0m[0mcase class Examples[P[_]]()(implicit L: Lambda[P]){[0m
+[0m[[0m[31merror[0m] [0m[0m^[0m
+[0m[[0m[31merror[0m] [0m[0mthree errors found[0m

@@ -1,0 +1,23 @@
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(lambdas.taglessfinal.hoas.semantics.StdSpec, org.scalatest.tools.Framework$$anon$1@1d4320db, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(lambdas.initial.hoas.semantics.ShowLambdaSpec, org.scalatest.tools.Framework$$anon$1@1d4320db, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(lambdas.initial.hoas.semantics.ReadLambdaSpec, org.scalatest.tools.Framework$$anon$1@1d4320db, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(lambdas.deserialization.TreeSpec, org.scalatest.tools.Framework$$anon$1@1d4320db, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(lambdas.deserialization.TypecheckSpec, org.scalatest.tools.Framework$$anon$1@1d4320db, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(lambdas.taglessfinal.debruijn.semantics.TermSpec, org.scalatest.tools.Framework$$anon$1@1d4320db, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning TaskDef(lambdas.taglessfinal.hoas.semantics.ShowSpec, org.scalatest.tools.Framework$$anon$1@1d4320db, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mSummary for ScalaCheck not available.[0m
+[0m[[0m[0minfo[0m] [0m[0mScalaTest[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 610 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 14[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 7, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 14, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0mPassed: Total 14, Failed 0, Errors 0, Passed 14[0m
+[0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	lambdas.deserialization.TreeSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	lambdas.initial.hoas.semantics.ReadLambdaSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	lambdas.taglessfinal.debruijn.semantics.TermSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	lambdas.taglessfinal.hoas.semantics.StdSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	lambdas.taglessfinal.hoas.semantics.ShowSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	lambdas.initial.hoas.semantics.ShowLambdaSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	lambdas.deserialization.TypecheckSpec[0m
