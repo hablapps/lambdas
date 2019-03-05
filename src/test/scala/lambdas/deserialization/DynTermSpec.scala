@@ -1,7 +1,7 @@
 package lambdas
 package deserialization
 
-import taglessfinal.debruijn._
+import tfdb._
 import org.scalatest._
 
 class DynTermSpec extends Matchers{

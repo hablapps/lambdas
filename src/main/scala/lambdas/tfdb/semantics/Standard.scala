@@ -1,6 +1,5 @@
 package lambdas
-package taglessfinal
-package debruijn
+package tfdb
 package semantics
 
 object Standard extends Lambda[Function1]{

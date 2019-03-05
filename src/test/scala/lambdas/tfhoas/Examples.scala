@@ -1,6 +1,5 @@
 package lambdas
-package taglessfinal
-package hoas
+package tfhoas
 
 case class Examples[P[_]]()(implicit L: Lambda[P]){
 

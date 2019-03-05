@@ -1,5 +1,7 @@
 package lambdas
-package taglessfinal
 
-package object debruijn extends Lambda.Syntax
+package object tfdb extends Lambda.Syntax{
+
+  type Term[E, T] = semantics.Term[E, T]
+}
 

@@ -1,6 +1,5 @@
 package lambdas
-package taglessfinal
-package hoas
+package tfhoas
 
 trait Lambda[P[_]]{
 

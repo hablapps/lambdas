@@ -1,19 +1,19 @@
 package lambdas
 package deserialization
 
-import taglessfinal.debruijn._
+import tfdb._
 
 object Typecheck{
 
   def read_t(t: Tree): Either[String, Typ] = t match {
-    case Node("TInt", List()) =>
+    case Tree.TInt() =>
       Right(Typ(tint[TQ]))
-    case Node("TArr", List(t1, t2)) =>
-      read_t(t1).right.flatMap{ t1t =>
-        read_t(t2).right.map[Typ]{ t2t =>
-          Typ(t1t.typ -> t2t.typ)
-        }
-      }
+
+    case Tree.TArr(t1, t2) => for {
+      t1t <- read_t(t1)
+      t2t <- read_t(t2)
+    } yield Typ(t1t.typ -> t2t.typ)
+
     case _ =>
       Left(s"Not a type: $t")
   }
@@ -42,11 +42,10 @@ object Typecheck{
     case Tree.Var(name) =>
       G.findVar(name, gamma)
 
-    case Tree.Lam(name, typ, body) =>
-      read_t(typ).right.flatMap{ ty1: Typ =>
-      apply(body, (Gamma.VarDesc(name, ty1.typ), gamma)).right.map[DynTerm[P, E]]{ db =>
-      DynTerm(ty1.typ -> db.typ, L.lam(db.term))
-      }}
+    case Tree.Lam(name, typ, body) => for {
+      ty1 <- read_t(typ)
+      db <- apply(body, (Gamma.Var(name, ty1.typ), gamma))
+    } yield DynTerm(ty1.typ -> db.typ, L.lam(db.term))
 
     case Tree.App(ft, at) =>
       apply(ft, gamma).right.flatMap{ df => {

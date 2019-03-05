@@ -3,7 +3,7 @@ package initial
 package hoas
 package semantics
 
-import taglessfinal.hoas.{Lambda => FLambda}
+import tfhoas.{Lambda => FLambda}
 
 case class FinallyLambda[P[_]]()(implicit F: FLambda[P]){
 

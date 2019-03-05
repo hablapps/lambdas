@@ -1,6 +1,5 @@
 package lambdas
-package taglessfinal
-package hoas
+package tfhoas
 package semantics
 
 object ShowLambda extends Lambda[ShowH]{

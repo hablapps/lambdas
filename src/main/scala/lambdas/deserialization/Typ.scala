@@ -7,7 +7,7 @@ abstract class Typ{
 }
 
 object Typ{
-  def apply[_A](t: TQ[_A]) = new Typ{
+  def apply[_A](t: TQ[_A]): Typ = new Typ{
     type A = _A
     val typ = t
   }

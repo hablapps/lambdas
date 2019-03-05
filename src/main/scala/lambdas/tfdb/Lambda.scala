@@ -1,6 +1,5 @@
 package lambdas
-package taglessfinal
-package debruijn
+package tfdb
 
 trait Lambda[P[E, T]]{
   def int[E](i: Int): P[E, Int]

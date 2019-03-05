@@ -1,6 +1,5 @@
 package lambdas
-package taglessfinal
-package hoas
+package tfhoas
 package semantics
 
 object Std extends Lambda[cats.Id]{

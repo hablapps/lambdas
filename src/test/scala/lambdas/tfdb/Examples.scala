@@ -1,6 +1,5 @@
 package lambdas
-package taglessfinal
-package debruijn
+package tfdb
 
 case class Examples[P[_, _]]()(implicit L: Lambda[P]){
 

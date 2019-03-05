@@ -1,1 +1,0 @@
-["lambdas.deserialization.TreeSpec","lambdas.initial.hoas.semantics.ReadLambdaSpec","lambdas.taglessfinal.debruijn.semantics.TermSpec","lambdas.taglessfinal.hoas.semantics.StdSpec","lambdas.taglessfinal.hoas.semantics.ShowSpec","lambdas.initial.hoas.semantics.ShowLambdaSpec","lambdas.deserialization.TypecheckSpec"]

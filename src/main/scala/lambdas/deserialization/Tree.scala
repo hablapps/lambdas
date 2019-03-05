@@ -59,6 +59,26 @@ object Tree{
       }
   }
 
+  object TArr{
+    def unapply(t: Tree): Option[(Tree, Tree)] =
+      t match {
+        case Node("TArr", List(t1, t2)) =>
+          Some((t1, t2))
+        case _ =>
+          None
+      }
+  }
+
+  object TInt{
+    def unapply(t: Tree): Boolean =
+      t match {
+        case Leaf("TInt") =>
+          true
+        case _ =>
+          false
+      }
+  }
+
   trait Syntax{
 
     def tr_int(i: Int): Tree =
@@ -77,7 +97,7 @@ object Tree{
       Node("App", List(f, a))
 
     val tr_tInt: Tree =
-      Node("TInt", List())
+      Leaf("TInt")
 
     def tr_tArr(t1: Tree, t2: Tree): Tree =
       Node("TArr", List(t1, t2))

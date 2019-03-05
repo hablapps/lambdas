@@ -10,6 +10,12 @@ object TSYM{
 
   def apply[P[_]](implicit T: TSYM[P]) = T
 
+  implicit object ShowTSYM extends TSYM[λ[T => String]]{
+    def tint: String = "Int"
+    def tarr[T1, T2](t1: String, t2: String) = s"($t1 => $t2)"
+  }
+
+
   trait Syntax{
     def tint[P[_]](implicit T: TSYM[P]): P[Int] =
       T.tint
