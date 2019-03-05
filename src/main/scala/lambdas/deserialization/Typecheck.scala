@@ -33,9 +33,9 @@ object Typecheck{
     case Tree.Add(e1, e2) => for {
       dt1 <- apply(e1, gamma).right
       dt2 <- apply(e2, gamma).right
-      _dt1 <- dt1.typ[AsInt].apply(dt1.term).toEither(
+      _dt1 <- dt1.typ[AsInt].cast[P[E, ?]](dt1.term).toEither(
         s"First operand of add, not an integer: ${dt1.typ}").right
-      _dt2 <- dt2.typ[AsInt].apply(dt2.term).toEither(
+      _dt2 <- dt2.typ[AsInt].cast[P[E, ?]](dt2.term).toEither(
         s"Second operand of add, not an integer: ${dt2.typ}").right
     } yield DynTerm(tint[TQ], L.add(_dt1, _dt2))
 
@@ -51,9 +51,9 @@ object Typecheck{
       apply(ft, gamma).right.flatMap{ df => {
       val asArrow = df.typ[AsArrow]
       asArrow.eq.toEither(s"Not a lambda: ${df.typ}").right.flatMap{ case (tqT1, tqT2, eq) =>
-      asArrow(df.term).toEither(s"Should not happen").right.flatMap{ _df =>
+      asArrow.cast[P[E, ?]](df.term).toEither(s"Should not happen").right.flatMap{ _df =>
       apply(at, gamma).right.flatMap{ da => {
-      SafeCast(da.typ[SafeCast])(tqT1, da.term).toEither(s"Not argument: ${da.typ}").right.map{ _da =>
+      da.typ[As].cast[asArrow.T1, P[E, ?]](tqT1, da.term).toEither(s"Not argument: ${da.typ}").right.map{ _da =>
       DynTerm(tqT2, L.app(_df)(_da))
       }}}}}}}
 

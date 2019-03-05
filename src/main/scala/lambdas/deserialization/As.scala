@@ -3,22 +3,22 @@ package deserialization
 
 import scalaz.Leibniz._
 
-abstract class SafeCast[A]{
+abstract class As[A]{
   def apply[B](tb: TQ[B]): Option[A === B]
+
+  def cast[B, F[_]](tb: TQ[B], fa: F[A]): Option[F[B]] =
+    apply(tb).map(_.subst[F](fa))
 }
 
-object SafeCast{
+object As{
 
-  implicit def apply[A, B, E, P[_, _]](sc: SafeCast[A]): (TQ[B], P[E, A]) => Option[P[E, B]] =
-    (tb, pa) => sc(tb).map(_.subst[P[E, ?]](pa))
-
-  implicit val SafeCastTSYM = new TSYM[SafeCast]{
-    def tint = new SafeCast[Int]{
+  implicit val AsTSYM = new TSYM[As]{
+    def tint = new As[Int]{
       def apply[B](tb: TQ[B]) =
         tb[AsInt].eq map symm
     }
 
-    def tarr[T1, T2](t1: SafeCast[T1], t2: SafeCast[T2]) = new SafeCast[T1 => T2]{
+    def tarr[T1, T2](t1: As[T1], t2: As[T2]) = new As[T1 => T2]{
       def apply[B](tb: TQ[B]) = {
         val asArr = tb[AsArrow]
         for {
