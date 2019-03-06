@@ -7,7 +7,8 @@ abstract class AsArrow[A]{
   type T1
   type T2
   val tA: TQ[A]
-  // val eq: Option[(TQ[T1], TQ[T2], A === (T1 => T2))]
+  val eq: Option[(TQ[T1], TQ[T2], A === (T1 => T2))] =
+    cast[A === ?](refl[A])
 
   def cast[F[_]](pa: F[A]): Option[(TQ[T1], TQ[T2], F[T1 => T2])]
     // eq.map{ eq => (eq._1, eq._2, eq._3.subst[F](pa)) }
@@ -27,6 +28,7 @@ object AsArrow{
   // }
 
   implicit val AsArrowTSYM = new TSYM[AsArrow]{
+
     def tint: AsArrow[Int] = new AsArrow[Int]{
       type T1 = Nothing
       type T2 = Nothing
