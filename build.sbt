@@ -23,6 +23,7 @@ scalacOptions ++= Seq(
   // "-Xprint:typer",
   // "-Xlog-implicit-conversions",
   "-feature",
+  "-language:existentials",
   "-language:implicitConversions",
   "-language:postfixOps",
   "-language:higherKinds")

@@ -9,8 +9,8 @@ abstract class AsArrow[A]{
   val tA: TQ[A]
   val eq: Option[(TQ[T1], TQ[T2], A === (T1 => T2))]
 
-  def cast[F[_]](pa: F[A]): Option[F[T1 => T2]] =
-    eq.map(_._3.subst[F](pa))
+  def cast[F[_]](pa: F[A]): Option[(TQ[T1], TQ[T2], F[T1 => T2])] =
+    eq.map{ eq => (eq._1, eq._2, eq._3.subst[F](pa)) }
 }
 
 object AsArrow{

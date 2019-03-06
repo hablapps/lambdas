@@ -111,9 +111,21 @@ class Live extends FunSpec with Matchers with Inside{
   The result of typechecking trees is an interpretation of the algebra, plus a type representation.
   */
 
-  val Right(DynTerm(typ, term)) = Typecheck[Function1, Unit, Unit](t1, ())
-  term: (Unit => _)
-  typ: TQ[_]
+  val Right(dt@ DynTerm(typ, term)) = Typecheck[Function1, Unit, Unit](t1, ())
 
-  typ[Show] shouldBe "((Int => Int) => Int)"
+  it("Safe casts for dynamic terms"){
+    term: (Unit => _)
+    typ: TQ[_]
+
+    typ[Show] shouldBe "((Int => Int) => Int)"
+
+    inside(dt.as((tint[TQ] -> tint[TQ]) -> tint[TQ])){
+      case Some(_term) =>
+        _term : (Unit => ((Int => Int) => Int))
+    }
+
+    inside(dt.as(tint[TQ] -> tint[TQ])){
+      case None => ()
+    }
+  }
 }
