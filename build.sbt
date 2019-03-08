@@ -6,7 +6,7 @@ scalaBinaryVersion := "2.12"
 
 organization := "org.hablapps"
 
-version := "0.1-SNAPSHOT"
+version := "0.1"
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 
