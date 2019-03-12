@@ -6,7 +6,7 @@ import safecast._
 import syntax._
 
 import org.scalatest._
-import scalaz.Id.Id
+import cats.Id
 
 class Live extends FunSpec with Matchers with Inside {
 

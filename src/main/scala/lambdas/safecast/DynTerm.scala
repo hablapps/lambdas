@@ -7,7 +7,7 @@ abstract class DynTerm[F[_]] {
   val term: F[A]
 
   def as[B](tb: TypeTerm[B]): Option[F[B]] =
-    typ[As].as[B, F](tb, term)
+    typ[Cast].as[B, F](tb, term)
 
   def asInt: Option[F[Int]] =
     as(tint[TypeTerm])
@@ -21,7 +21,7 @@ abstract class DynTerm[F[_]] {
   }
 
   def asArrow: Option[_AsArrow] = {
-    val asArrow = typ[AsArrow]
+    val asArrow = typ[CastArrow]
     asArrow.as[F](term) map {
       case (_typ1, _typ2, _term) =>
         new _AsArrow {
