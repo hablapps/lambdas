@@ -1,8 +1,6 @@
 package lambdas
 package trees
 
-import safecast._
-
 package object semantics extends DynLTermModule {
 
   type Semantics[T] = Tree => T

@@ -6,9 +6,9 @@ import org.scalatest._
 
 class ShowSpec extends FunSpec with Matchers {
 
-  val L = Lambda[ShowH]
+  val L = Lambda[Show]
   import L._
-  val E = Examples[ShowH]()
+  val E = Examples[Show]()
   import E._
 
   describe("Evaluate lambda expressions - tagless final - HOAS") {

@@ -2,6 +2,7 @@ package lambdas
 package trees
 package semantics
 
+import scala.language.existentials
 import safecast._
 import syntax._
 
@@ -41,7 +42,7 @@ class Live extends FunSpec with Matchers with Inside {
   Allowing multiple potential evaluations
     */
   it("Printing lambda expressions (hoas)") {
-    l1_hoas[ShowH].apply(0) shouldBe
+    l1_hoas[Show].apply(0) shouldBe
     "(λx0.(x0 1))"
   }
 
@@ -114,10 +115,10 @@ class Live extends FunSpec with Matchers with Inside {
     // term: (Unit => _)
     // typ: TypeTerm[_]
 
-    typ[Show] shouldBe "((Int => Int) => Int)"
+    typ[λ[T => String]] shouldBe "((Int => Int) => Int)"
 
     inside(dt.as((tint[TypeTerm] -> tint[TypeTerm]) -> tint[TypeTerm])) {
-      case Some(_term) =>
+      case Some(_) =>
       // _term: (Unit => ((Int => Int) => Int))
     }
 

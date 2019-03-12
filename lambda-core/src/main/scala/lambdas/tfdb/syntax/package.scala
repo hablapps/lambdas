@@ -1,6 +1,8 @@
 package lambdas
 package tfdb
 
+import scala.language.implicitConversions
+
 package object syntax {
 
   implicit def int[P[_, _], E](i: Int)(implicit L: Lambda[P]): P[E, Int] =

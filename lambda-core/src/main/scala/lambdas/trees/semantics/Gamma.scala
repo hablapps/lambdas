@@ -27,7 +27,7 @@ object Gamma {
       ): Either[String, DynLTerm[P, (T, E)]] =
         gamma match {
 
-          case (Var(name, typ), _) =>
+          case (Var(_, typ), _) =>
             Right(DynLTerm(typ, vz[P, E, T]))
 
           case (_, tail) =>

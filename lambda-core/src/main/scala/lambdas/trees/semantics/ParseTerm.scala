@@ -32,7 +32,7 @@ case class ParseTerm[P[_, _], Γ, E](gamma: Γ)(
     case Lam(name, typ, body) =>
       for {
         ty1 <- ParseType(typ)
-        db  <- ParseTerm(Gamma.Var(name, ty1.typ), gamma).apply(body)
+        db  <- ParseTerm((Gamma.Var(name, ty1.typ), gamma)).apply(body)
       } yield DynLTerm(ty1.typ -> db.typ, L.lam(db.term))
 
     case App(ft, at) =>

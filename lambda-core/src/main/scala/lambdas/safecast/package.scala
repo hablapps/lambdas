@@ -5,8 +5,6 @@ package lambdas
 
 package object safecast extends Type.Syntax {
 
-  type Show[T] = String
-
   // Auxiliary function
 
   import cats.evidence.Is
