@@ -8,16 +8,17 @@ import interpreters._
 
 import tfdb._
 
-trait ParsedTerm[P[_, _]] {
+trait ParsedLambdaTerm[P[_, _]] {
   def apply[Γ, E](implicit G: Gamma[Γ, E]): Γ => Either[String, DynLTerm[P, E]]
 }
 
-object ParsedTerm {
+object ParsedLambdaTerm {
 
-  case class Parser[P[_, _]]()(implicit L: Lambda[P]) extends OpenInterpreter[Tree, ParsedTerm[P]] {
-    def apply(rec: => Interpreter[Tree, ParsedTerm[P]]) =
+  case class Parser[P[_, _]]()(implicit L: Lambda[P])
+      extends OpenInterpreter[Tree, ParsedLambdaTerm[P]] {
+    def apply(rec: => Interpreter[Tree, ParsedLambdaTerm[P]]) =
       (tree: Tree) =>
-        new ParsedTerm[P] {
+        new ParsedLambdaTerm[P] {
           def apply[Γ, E](implicit G: Gamma[Γ, E]) =
             gamma =>
               tree match {
