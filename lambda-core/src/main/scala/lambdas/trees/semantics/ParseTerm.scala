@@ -4,6 +4,7 @@ package semantics
 
 import syntax._
 import safecast._
+import interpreters._
 
 import tfdb._
 
@@ -11,7 +12,7 @@ case class ParseTerm[P[_, _], Γ, E](gamma: Γ)(
     implicit
     L: Lambda[P],
     G: Gamma[Γ, E]
-) extends Semantics[Either[String, DynLTerm[P, E]]] {
+) extends Interpreter[Tree, Either[String, DynLTerm[P, E]]] {
 
   def apply(tree: Tree) = tree match {
 
@@ -31,7 +32,7 @@ case class ParseTerm[P[_, _], Γ, E](gamma: Γ)(
 
     case Lam(name, typ, body) =>
       for {
-        ty1 <- ParseType(typ)
+        ty1 <- ParseType.apply(typ)
         db  <- ParseTerm((Gamma.Var(name, ty1.typ), gamma)).apply(body)
       } yield DynLTerm(ty1.typ -> db.typ, L.lam(db.term))
 
