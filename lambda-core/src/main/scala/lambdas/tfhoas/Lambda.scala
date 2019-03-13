@@ -3,10 +3,6 @@ package tfhoas
 
 trait Lambda[P[_]] {
 
-  def int(i: Int): P[Int]
-
-  def add(i1: P[Int])(i2: P[Int]): P[Int]
-
   def tuple[A, B](a: P[A], b: P[B]): P[(A, B)]
 
   def fst[A, B](t: P[(A, B)]): P[A]

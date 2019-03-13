@@ -5,6 +5,7 @@ package semantics
 import scala.language.existentials
 import safecast._
 import syntax._
+import arithmetic._
 
 import org.scalatest._
 import cats.Id
@@ -33,9 +34,9 @@ class Live extends FunSpec with Matchers with Inside {
   /**
   The goal is arriving at the following expressions.
     */
-  def l1_hoas[P[_]](implicit L: tfhoas.Lambda[P]): P[(Int => Int) => Int] =
+  def l1_hoas[P[_]](implicit L: tfhoas.Lambda[P], A: Arithmetic[P]): P[(Int => Int) => Int] =
     L.lam { x0: P[Int => Int] =>
-      L.app(x0)(L.int(1))
+      L.app(x0)(A.int(1))
     }
 
   /**

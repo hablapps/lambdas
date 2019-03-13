@@ -4,10 +4,6 @@ package semantics
 
 object Std extends Lambda[cats.Id] {
 
-  def int(i: Int): Int = i
-
-  def add(i1: Int)(i2: Int): Int = i1 + i2
-
   def tuple[A, B](a: A, b: B): (A, B) = (a, b)
 
   def fst[A, B](t: (A, B)): A = t._1

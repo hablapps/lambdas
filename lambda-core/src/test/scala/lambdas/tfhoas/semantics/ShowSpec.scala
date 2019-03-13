@@ -4,8 +4,12 @@ package semantics
 
 import org.scalatest._
 
+import arithmetic._
+
 class ShowSpec extends FunSpec with Matchers {
 
+  val A = Arithmetic[Show]
+  import A._
   val L = Lambda[Show]
   import L._
   val E = Examples[Show]()
