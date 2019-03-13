@@ -7,7 +7,7 @@ import safecast._
 import interpreters._
 import arithmetic._
 
-case class ParseInt[F[_]]()(implicit A: Arithmetic[F])
+case class ParseIntTerm[F[_]]()(implicit A: Arithmetic[F])
     extends Interpreter[Tree, Either[String, DynTerm[F]]] {
 
   def apply(tree: Tree) = tree match {

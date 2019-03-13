@@ -1,54 +1,47 @@
-// package lambdas
-// package trees
-// package semantics
+package lambdas
+package trees
+package semantics
 
-// import syntax._
-// import safecast._
-// import interpreters._
+import syntax._
+import safecast._
+import interpreters._
 
-// import tfdb._
+import tfdb._
 
-// object ParseLambdaTerm {
+trait LambdaTermInterpreter[P[_, _]] {
+  def apply[Γ, E](tree: Tree)(implicit G: Gamma[Γ, E]): Γ => Either[String, DynLTerm[P, E]]
+}
 
-//   def apply[P[_, _], Γ, E](gamma: Γ)(rec: => Interpreter[Tree, Either[String, DynLTerm[P, E]]])(
-//       implicit
-//       L: Lambda[P],
-//       G: Gamma[Γ, E]
-//   ): Interpreter[Tree, Either[String, DynLTerm[P, E]]] =
-//     tree =>
-//       tree match {
+object ParseLambdaTerm {
 
-//         case IntT(i) =>
-//           Right(DynLTerm(tint[TypeTerm], L.int(i)))
+  def apply[P[_, _]](rec: => LambdaTermInterpreter[P])(
+      implicit
+      L: Lambda[P]
+  ) = new LambdaTermInterpreter[P] {
+    def apply[Γ, E](tree: Tree)(implicit G: Gamma[Γ, E]) =
+      gamma =>
+        tree match {
 
-//         case Add(e1, e2) =>
-//           for {
-//             dt1 <- rec(e1)
-//             dt2 <- rec(e2)
-//             _dt1 <- dt1
-//               .as(tint[TypeTerm])
-//               .toEither(s"First operand of add, not an integer: ${dt1.typ}")
-//             _dt2 <- dt2.asInt.toEither(s"Second operand of add, not an integer: ${dt2.typ}")
-//           } yield DynLTerm(tint[TypeTerm], L.add(_dt1, _dt2))
+          case Var(name) =>
+            G.findVar(name, gamma)
 
-//         case Var(name) =>
-//           G.findVar(name, gamma)
+          case Lam(name, typ, body) =>
+            for {
+              ty1 <- ParseType.apply(typ)
+              db <- rec[(Gamma.Var[ty1.A], Γ), (ty1.A, E)](body)
+                .apply((Gamma.Var(name, ty1.typ), gamma))
+            } yield DynLTerm(ty1.typ -> db.typ, L.lam(db.term))
 
-//         case Lam(name, typ, body) =>
-//           for {
-//             ty1 <- ParseType.apply(typ)
-//             db  <- ParseLambdaTerm((Gamma.Var(name, ty1.typ), gamma))(rec).apply(body)
-//           } yield DynLTerm(ty1.typ -> db.typ, L.lam(db.term))
+          case App(ft, at) =>
+            for {
+              df  <- rec(ft).apply(gamma)
+              asA <- df.asArrow.toEither(s"Not a lambda: ${df.typ}")
+              da  <- rec(at).apply(gamma)
+              _da <- da.as(asA.typ1).toEither(s"Not argument: ${da.typ}")
+            } yield DynLTerm(asA.typ2, L.app(asA.term)(_da))
 
-//         case App(ft, at) =>
-//           for {
-//             df  <- rec(ft)
-//             asA <- df.asArrow.toEither(s"Not a lambda: ${df.typ}")
-//             da  <- rec(at)
-//             _da <- da.as(asA.typ1).toEither(s"Not argument: ${da.typ}")
-//           } yield DynLTerm(asA.typ2, L.app(asA.term)(_da))
-
-//         case _ =>
-//           Left(s"ParseTerm error: $tree")
-//       }
-// }
+          case _ =>
+            Left(s"ParseTerm error: $tree")
+        }
+  }
+}
