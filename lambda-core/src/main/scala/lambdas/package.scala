@@ -27,6 +27,10 @@ package object lambdas {
     a
   }
 
+  trait ForAll[P[_, _], TC[_[_]]] {
+    def apply[E]: TC[P[E, ?]]
+  }
+
   type ShowB[E, T] = Int => String
   type Show[T]     = Int => String
   type ShowP[T]    = String

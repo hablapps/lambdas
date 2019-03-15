@@ -7,44 +7,39 @@ import safecast._
 import interpreters._
 
 import tfdb._
+import arithmetic._, arithmetic.semantics.ShowArithFun
 
-case class ParseTerm[P[_, _], Γ, E](gamma: Γ)(
-    implicit
-    L: Lambda[P],
-    G: Gamma[Γ, E]
-) extends Interpreter[Tree, Either[String, DynLTerm[P, E]]] {
+object ParseTerm {
 
-  def apply(tree: Tree) = tree match {
-
-    case IntT(i) =>
-      Right(DynLTerm(tint[TypeTerm], L.int(i)))
-
-    case Add(e1, e2) =>
-      for {
-        dt1  <- apply(e1)
-        dt2  <- apply(e2)
-        _dt1 <- dt1.as(tint[TypeTerm]).toEither(s"First operand of add, not an integer: ${dt1.typ}")
-        _dt2 <- dt2.asInt.toEither(s"Second operand of add, not an integer: ${dt2.typ}")
-      } yield DynLTerm(tint[TypeTerm], L.add(_dt1, _dt2))
-
-    case Var(name) =>
-      G.findVar(name, gamma)
-
-    case Lam(name, typ, body) =>
-      for {
-        ty1 <- ParseType.apply(typ)
-        db  <- ParseTerm((Gamma.Var(name, ty1.typ), gamma)).apply(body)
-      } yield DynLTerm(ty1.typ -> db.typ, L.lam(db.term))
-
-    case App(ft, at) =>
-      for {
-        df  <- apply(ft)
-        asA <- df.asArrow.toEither(s"Not a lambda: ${df.typ}")
-        da  <- apply(at)
-        _da <- da.as(asA.typ1).toEither(s"Not argument: ${da.typ}")
-      } yield DynLTerm(asA.typ2, L.app(asA.term)(_da))
-
-    case _ =>
-      Left(s"ParseTerm error: $tree")
+  case class IntTermParserLifted[P[_, _]]()(implicit F: ForAll[P, Arithmetic])
+      extends OpenInterpreter[Tree, ParsedLambdaTerm[P]] {
+    def apply(rec: => Interpreter[Tree, ParsedLambdaTerm[P]]) =
+      (tree: Tree) =>
+        new ParsedLambdaTerm[P] {
+          def apply[Γ, E](implicit G: Gamma[Γ, E]) =
+            (γ: Γ) => IntTermParser.parser[P[E, ?]](F[E])(rec andThen { _.apply.apply(γ) })(tree)
+        }
   }
+
+  import cats.instances.string._
+
+  implicit class Ops[P[_, _]](sem1: OpenInterpreter[Tree, ParsedLambdaTerm[P]]) {
+    def orElse(sem2: OpenInterpreter[Tree, ParsedLambdaTerm[P]]) =
+      new OpenInterpreter[Tree, ParsedLambdaTerm[P]] {
+        def apply(rec: => Tree => ParsedLambdaTerm[P]): Tree => ParsedLambdaTerm[P] =
+          (tree: Tree) =>
+            new ParsedLambdaTerm[P] {
+              def apply[Γ, E](implicit G: Gamma[Γ, E]) =
+                (gamma: Γ) =>
+                  sem1(rec)(tree).apply.apply(gamma) orElse
+                  sem2(rec)(tree).apply.apply(gamma)
+            }
+      }
+  }
+
+  def apply[P[_, _]: Lambda](
+      implicit A: ForAll[P, Arithmetic]
+  ): Interpreter[Tree, ParsedLambdaTerm[P]] =
+    (ParsedLambdaTerm.Parser[P]: OpenInterpreter[Tree, ParsedLambdaTerm[P]]) orElse
+    IntTermParserLifted[P]() close
 }

@@ -110,7 +110,7 @@ class Live extends FunSpec with Matchers with Inside {
   /**
   The result of typechecking trees is an interpretation of the algebra, plus a type representation.
     */
-  val Right(dt @ DynLTerm(typ, term)) = ParseTerm[Function1, Unit, Unit](()).apply(t1)
+  val Right(dt @ DynLTerm(typ, term)) = ParseTerm[Function1].apply(t1)[Unit, Unit].apply(())
 
   it("Safe casts for dynamic terms") {
     // term: (Unit => _)

@@ -25,7 +25,6 @@ object ParseType {
   }(t => s"Not a type: $t")
 
   lazy val ParseIntType = Interpreter[Tree, String, ATypeTerm] {
-    case TInt() =>
-      Right(ATypeTerm(tint[TypeTerm]))
+    case TInt() => Right(tint[TypeTerm])
   }(t => s"Not a type: $t")
 }

@@ -7,7 +7,7 @@ abstract class ATypeTerm {
 }
 
 object ATypeTerm {
-  def apply[_A](t: TypeTerm[_A]): ATypeTerm = new ATypeTerm {
+  implicit def apply[_A](t: TypeTerm[_A]): ATypeTerm = new ATypeTerm {
     type A = _A
     val typ = t
   }
