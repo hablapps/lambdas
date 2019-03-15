@@ -8,7 +8,7 @@ import cats.instances.string._
 
 import interpreters._
 
-object ParseType {
+object TypeParser {
 
   val apply: Interpreter[Tree, Either[String, ATypeTerm]] =
     ParseLambdaType orElse

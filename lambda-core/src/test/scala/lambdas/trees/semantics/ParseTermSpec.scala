@@ -7,24 +7,24 @@ import syntax._
 
 import org.scalatest._
 
-class ParseTermSpec extends FunSpec with Matchers with Inside {
+class TermParserSpec extends FunSpec with Matchers with Inside {
 
   it("Int literals") {
-    inside(ParseTerm[ShowB].apply(tr_int(1))[Unit, Unit].apply(())) {
+    inside(TermParser[ShowB].apply(tr_int(1))(())) {
       case Right(DynLTerm(_, term)) =>
         term(0) shouldBe "1"
     }
   }
 
   it("Add expressions") {
-    inside(ParseTerm[ShowB].apply(tr_add(tr_int(1), tr_int(2)))[Unit, Unit].apply(())) {
+    inside(TermParser[ShowB].apply(tr_add(tr_int(1), tr_int(2)))(())) {
       case Right(DynLTerm(_, term)) =>
         term(0) shouldBe "(1+2)"
     }
   }
 
   it("Lambda expressions") {
-    inside(ParseTerm[ShowB].apply(tr_lam("v0", tr_tInt, tr_vr("v0")))[Unit, Unit].apply(())) {
+    inside(TermParser[ShowB].apply(tr_lam("v0", tr_tInt, tr_vr("v0")))(())) {
       case Right(DynLTerm(_, term)) =>
         term(0) shouldBe "(λx0.x0)"
     }
@@ -32,9 +32,8 @@ class ParseTermSpec extends FunSpec with Matchers with Inside {
 
   it("App expressions") {
     inside(
-      ParseTerm[ShowB]
-        .apply(tr_app(tr_lam("v0", tr_tInt, tr_vr("v0")), tr_int(1)))[Unit, Unit]
-        .apply(())
+      TermParser[ShowB]
+        .apply(tr_app(tr_lam("v0", tr_tInt, tr_vr("v0")), tr_int(1)))(())
     ) {
       case Right(DynLTerm(_, term)) =>
         term(0) shouldBe "((λx0.x0) 1)"
@@ -114,9 +113,8 @@ class ParseTermSpec extends FunSpec with Matchers with Inside {
   it("Poly expressions") {
 
     inside(
-      ParseTerm[ArithLambdaTerm]
-        .apply(tr_app(tr_lam("v0", tr_tInt, tr_vr("v0")), tr_int(1)))[Unit, Unit]
-        .apply(())
+      TermParser[ArithLambdaTerm]
+        .apply(tr_app(tr_lam("v0", tr_tInt, tr_vr("v0")), tr_int(1)))(())
     ) {
       case Right(DynLTerm(_, term)) =>
         term[ShowB].apply(0) shouldBe "((λx0.x0) 1)"
@@ -127,9 +125,8 @@ class ParseTermSpec extends FunSpec with Matchers with Inside {
   it("Poly expressions (open)") {
 
     inside(
-      ParseTerm[ArithLambdaTerm]
-        .apply(tr_add(tr_vr("v0"), tr_int(1)))[(Gamma.Var[Int], Unit), (Int, Unit)]
-        .apply((Gamma.Var("v0", tint[TypeTerm]), ()))
+      TermParser[ArithLambdaTerm]
+        .apply(tr_add(tr_vr("v0"), tr_int(1)))((Gamma.Var("v0", tint[TypeTerm]), ()))
     ) {
 
       case Right(DynLTerm(_, term)) =>

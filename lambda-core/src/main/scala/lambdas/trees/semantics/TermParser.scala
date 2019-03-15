@@ -9,15 +9,15 @@ import interpreters._
 import tfdb._
 import arithmetic._, arithmetic.semantics.ShowArithFun
 
-object ParseTerm {
+object TermParser {
 
   case class IntTermParserLifted[P[_, _]]()(implicit F: ForAll[P, Arithmetic])
       extends OpenInterpreter[Tree, ParsedLambdaTerm[P]] {
     def apply(rec: => Interpreter[Tree, ParsedLambdaTerm[P]]) =
       (tree: Tree) =>
         new ParsedLambdaTerm[P] {
-          def apply[Γ, E](implicit G: Gamma[Γ, E]) =
-            (γ: Γ) => IntTermParser.parser[P[E, ?]](F[E])(rec andThen { _.apply.apply(γ) })(tree)
+          def apply[Γ, E](γ: Γ)(implicit G: Gamma[Γ, E]) =
+            IntTermParser.parser[P[E, ?]](F[E])(rec andThen { _.apply(γ) })(tree)
         }
   }
 
@@ -29,10 +29,9 @@ object ParseTerm {
         def apply(rec: => Tree => ParsedLambdaTerm[P]): Tree => ParsedLambdaTerm[P] =
           (tree: Tree) =>
             new ParsedLambdaTerm[P] {
-              def apply[Γ, E](implicit G: Gamma[Γ, E]) =
-                (gamma: Γ) =>
-                  sem1(rec)(tree).apply.apply(gamma) orElse
-                  sem2(rec)(tree).apply.apply(gamma)
+              def apply[Γ, E](γ: Γ)(implicit G: Gamma[Γ, E]) =
+                sem1(rec)(tree).apply(γ) orElse
+                sem2(rec)(tree).apply(γ)
             }
       }
   }
