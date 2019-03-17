@@ -3,6 +3,18 @@ package safecast
 
 import cats.evidence._
 
+trait CastTC[P[_], T1] {
+  def apply[T2](t1: P[T1], t2: P[T2]): Option[T1 Is T2]
+
+  def as[T2, F[_]](t1: P[T1], t2: P[T2]): F[T1] => Option[F[T2]] =
+    f1 => apply(t1, t2) map (_.substitute[F](f1))
+}
+
+// object CastTC{
+//   implicit val d = new CastTC[TypeTerm, T1]{
+//     def apply[T2]()}
+// }
+
 abstract class Cast[A] {
   def apply[B](tb: TypeTerm[B]): Option[A Is B]
 
