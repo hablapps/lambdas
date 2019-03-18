@@ -4,10 +4,10 @@ package safecast
 import cats.evidence._
 
 trait CastTC[P[_], T1] {
-  def apply[T2](t1: P[T1], t2: P[T2]): Option[T1 Is T2]
+  def apply[T2](t2: P[T2]): Option[T1 Is T2]
 
-  def as[T2, F[_]](t1: P[T1], t2: P[T2]): F[T1] => Option[F[T2]] =
-    f1 => apply(t1, t2) map (_.substitute[F](f1))
+  def as[T2, F[_]](t2: P[T2])(f1: F[T1]): Option[F[T2]] =
+    apply(t2) map (_.substitute[F](f1))
 }
 
 // object CastTC{
