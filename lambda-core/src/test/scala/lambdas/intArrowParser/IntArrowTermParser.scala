@@ -7,7 +7,7 @@ import interpreters._
 import tfdb._, tfdb.semantics._, ArrowParser.Result
 import arithmetic._, arithmetic.semantics._
 
-object IntArrowParser {
+object IntArrowTermParser {
 
   case class IntParserLifted[T[_], P[_, _]]()(
       implicit
