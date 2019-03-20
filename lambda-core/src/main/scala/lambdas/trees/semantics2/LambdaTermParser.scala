@@ -17,6 +17,7 @@ case class LambdaTermParser[P[_, _], T[_]: ArrowType: Cast](
     S: ForAll0[T, cats.Show],
     L: Lambda[P]
 ) extends OpenInterpreter[Tree, Result[T, P]] {
+
   def apply(rec: => Interpreter[Tree, Result[T, P]]) =
     (tree: Tree) =>
       new Result[T, P] {
@@ -38,9 +39,9 @@ case class LambdaTermParser[P[_, _], T[_]: ArrowType: Cast](
                 asA <- AsArrow.unapply(df.typ).toEither(s"Not a lambda: ${S().show(df.typ)}")
                 da  <- rec(at).apply(γ)
                 _da <- da
-                  .as(asA.is._1)
-                  .toEither(s"Wrong type: ${S().show(da.typ)} should be ${S().show(asA.is._2)}")
-              } yield DynLTerm(asA.is._2, L.app(asA.is._3.substitute[P[E, ?]](df.term))(_da))
+                  .as(asA.t1)
+                  .toEither(s"Wrong type: ${S().show(da.typ)} should be ${S().show(asA.t1)}")
+              } yield DynLTerm(asA.t2, L.app(asA.as[P[E, ?]](df.term))(_da))
 
             case _ =>
               Left(s"ParseTerm error: $tree")

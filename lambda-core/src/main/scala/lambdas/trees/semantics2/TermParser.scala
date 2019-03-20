@@ -43,9 +43,8 @@ object TermParser {
       }
   }
 
-  def apply[P[_, _]: Lambda](
-      implicit A: ForAll[P, Arithmetic]
-  ): Interpreter[Tree, Result[IntArrowTypeTerm, P]] =
+  def apply[P[_, _]: Lambda: ForAll[?[_, _], Arithmetic]]
+    : Interpreter[Tree, Result[IntArrowTypeTerm, P]] =
     LambdaTermParser[P, IntArrowTypeTerm](TypeParser.apply) orElse
     IntTermParserLifted[IntArrowTypeTerm, P]() close
 }

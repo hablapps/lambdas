@@ -14,24 +14,31 @@ object ArrowType {
   abstract class Case[T[_], A] {
     type T1
     type T2
-    val ta: T[A]
-    val is: (T[T1], T[T2], A Is (T1 => T2))
+
+    val t1: T[T1]
+    val t2: T[T2]
+    val is: A Is (T1 => T2)
+
+    def as[F[_]](t: F[A]): F[T1 => T2] =
+      is.substitute[F](t)
   }
 
   object Case {
-    implicit def Case_ArrowType[T[_]: ArrowType] = new ArrowType[λ[A => Option[Case[T, A]]]] {
-      def tarrow[_T1, _T2](ot1: Option[Case[T, _T1]], ot2: Option[Case[T, _T2]]) =
-        for {
-          t1 <- ot1
-          t2 <- ot2
-        } yield
-          new Case[T, _T1 => _T2] {
+    implicit def Case_ArrowType[T[_]: ArrowType] =
+      new ArrowType[λ[A => (T[A], Option[Case[T, A]])]] {
+        def tarrow[_T1, _T2](
+            ot1: (T[_T1], Option[Case[T, _T1]]),
+            ot2: (T[_T2], Option[Case[T, _T2]])
+        ) =
+          (ArrowType[T].tarrow(ot1._1, ot2._1), Option(new Case[T, _T1 => _T2] {
             type T1 = _T1
             type T2 = _T2
-            val ta = ArrowType[T].tarrow(t1.ta, t2.ta)
-            val is = (t1.ta, t2.ta, Is.refl[T1 => T2])
-          }
-    }
+            // val ta =
+            val t1 = ot1._1
+            val t2 = ot2._1
+            val is = Is.refl[T1 => T2]
+          }))
+      }
   }
 
   implicit val _ShowP = new ArrowType[ShowP] {
@@ -49,9 +56,9 @@ object ArrowType {
         def apply[T2](t2: T[T2]): Option[(T0 => T1) Is T2] =
           for {
             result <- IsArrow.unapply(t2)
-            eqT0   <- t0(result.is._1)
-            eqT1   <- t1(result.is._2)
-          } yield (eqT0, eqT1).lift2[Function1].andThen(result.is._3.flip)
+            eqT0   <- t0(result.t1)
+            eqT1   <- t1(result.t2)
+          } yield (eqT0, eqT1).lift2[Function1].andThen(result.is.flip)
       }
     }
 

@@ -43,12 +43,12 @@ object IntArrowTypeTerm {
   implicit val ArrowTypeMatch = new ArrowType.Match[IntArrowTypeTerm] {
 
     implicit val TIsArrow_IntType =
-      new IntType[λ[T => Option[ArrowType.Case[IntArrowTypeTerm, T]]]] {
-        def tint = None
+      new IntType[λ[T => (IntArrowTypeTerm[T], Option[ArrowType.Case[IntArrowTypeTerm, T]])]] {
+        def tint = (IntType[IntArrowTypeTerm].tint, None)
       }
 
     def unapply[A](t: IntArrowTypeTerm[A]): Option[ArrowType.Case[IntArrowTypeTerm, A]] =
-      t[λ[T => Option[ArrowType.Case[IntArrowTypeTerm, T]]]]
+      t[λ[T => (IntArrowTypeTerm[T], Option[ArrowType.Case[IntArrowTypeTerm, T]])]]._2
   }
 
   implicit val _Cast = new Cast[IntArrowTypeTerm] {
@@ -65,9 +65,9 @@ object IntArrowTypeTerm {
 
         case (ArrowTypeMatch(c1), ArrowTypeMatch(c2)) =>
           for {
-            t11Ist12 <- apply(c1.is._1, c2.is._1)
-            t21Ist22 <- apply(c1.is._2, c2.is._2)
-          } yield c1.is._3 andThen (t11Ist12, t21Ist22).lift2[Function1] andThen c2.is._3.flip
+            t11Ist12 <- apply(c1.t1, c2.t1)
+            t21Ist22 <- apply(c1.t2, c2.t2)
+          } yield c1.is andThen (t11Ist12, t21Ist22).lift2[Function1] andThen c2.is.flip
 
         case (_, _) =>
           None
