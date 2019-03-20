@@ -1,12 +1,11 @@
 package lambdas
-package trees
 package intArrowParser
 
+import cats.evidence.Is
+
+import safecast._
 import arithmetic.IntType
 import tfdb.ArrowType
-import safecast._
-
-import cats.evidence.Is
 
 trait IntArrowTypeTerm[A] {
   def apply[T[_]](implicit I: IntType[T], A: ArrowType[T]): T[A]

@@ -1,10 +1,9 @@
 package lambdas
-package trees
 package intArrowParser
 
 import cats.instances.string._
 
-import syntax._
+import trees._, syntax._
 import safecast._
 import interpreters._
 import arithmetic.IntType

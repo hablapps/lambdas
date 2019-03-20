@@ -1,11 +1,10 @@
 package lambdas
-package trees
 package intArrowParser
 
+import safecast._
+import trees._, syntax._
 import arithmetic.IntType
 import tfdb.ArrowType, tfdb.semantics._
-import safecast._
-import syntax._
 
 import org.scalatest._
 

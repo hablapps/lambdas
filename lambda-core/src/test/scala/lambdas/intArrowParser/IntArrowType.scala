@@ -1,12 +1,11 @@
 package lambdas
-package trees
 package intArrowParser
 
 import cats.evidence._
 
+import safecast._
 import arithmetic.IntType
 import tfdb.ArrowType
-import safecast._
 
 trait IntArrowType[T[_]] {
   def tint: T[Int]
