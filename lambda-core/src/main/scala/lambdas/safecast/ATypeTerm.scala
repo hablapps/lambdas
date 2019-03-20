@@ -12,15 +12,3 @@ object ATypeTerm {
     val typ = t
   }
 }
-
-abstract class ATypeTerm2[T[_]] {
-  type A
-  val typ: T[A]
-}
-
-object ATypeTerm2 {
-  implicit def apply[T[_], _A](t: T[_A]): ATypeTerm2[T] = new ATypeTerm2[T] {
-    type A = _A
-    val typ = t
-  }
-}
