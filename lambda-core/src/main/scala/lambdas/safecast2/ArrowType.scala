@@ -34,6 +34,11 @@ object ArrowType {
     }
   }
 
+  implicit val _ShowP = new ArrowType[ShowP] {
+    def tarrow[T1, T2](t1: String, t2: String): String =
+      s"$t1 -> $t2"
+  }
+
   trait Match[T[_]] {
     def unapply[A](t: T[A]): Option[Case[T, A]]
   }

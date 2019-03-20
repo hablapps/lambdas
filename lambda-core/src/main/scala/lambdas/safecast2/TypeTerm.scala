@@ -56,7 +56,7 @@ object IntArrowTypeTerm {
       t1[Cast.As[IntArrowTypeTerm, ?]].apply(t2)
   }
 
-  implicit val _NotPatentlyTotalCast = new Cast[IntArrowTypeTerm] {
+  val _NotPatentlyTotalCast = new Cast[IntArrowTypeTerm] {
     def apply[T1, T2](t1: IntArrowTypeTerm[T1], t2: IntArrowTypeTerm[T2]): Option[T1 Is T2] =
       (t1, t2) match {
 
@@ -74,4 +74,10 @@ object IntArrowTypeTerm {
       }
   }
 
+  implicit val _ForallShow = new ForAll0[IntArrowTypeTerm, cats.Show] {
+    def apply[A]() = new cats.Show[IntArrowTypeTerm[A]] {
+      def show(t: IntArrowTypeTerm[A]): String =
+        t[ShowP]
+    }
+  }
 }

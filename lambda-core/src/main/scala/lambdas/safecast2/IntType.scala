@@ -20,6 +20,10 @@ object IntType {
     }
   }
 
+  implicit val _ShowP = new IntType[ShowP] {
+    def tint: String = "TInt"
+  }
+
   trait Match[T[_]] {
     def unapply[A](t: T[A]): Option[Case[A]]
   }

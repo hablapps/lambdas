@@ -36,7 +36,7 @@ object Gamma {
 
           case (_, tail) =>
             for {
-              dt <- G.findVar[P](name, tail).right
+              dt <- G.findVar[P](name, tail)
             } yield DynLTerm(dt.typ, vs(dt.term))
         }
     }

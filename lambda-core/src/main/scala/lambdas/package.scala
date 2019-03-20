@@ -27,6 +27,10 @@ package object lambdas {
     a
   }
 
+  trait ForAll0[P[_], TC[_]] { self =>
+    def apply[A](): TC[P[A]]
+  }
+
   trait ForAll[P[_, _], TC[_[_]]] {
     def apply[E]: TC[P[E, ?]]
   }
