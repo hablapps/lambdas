@@ -26,7 +26,7 @@ object IntArrowTypeTerm {
     }
   }
 
-  implicit val IntTypeMatch = new IntType.Match[IntArrowTypeTerm] {
+  implicit val IntTypeMatch = new Match[IntArrowTypeTerm, IntType.Case] {
 
     implicit val TIsInt_ArrowType = new ArrowType[λ[T => Option[IntType.Case[T]]]] {
       def tarrow[T1, T2](
@@ -40,7 +40,7 @@ object IntArrowTypeTerm {
       t[λ[T => Option[IntType.Case[T]]]]
   }
 
-  implicit val ArrowTypeMatch = new ArrowType.Match[IntArrowTypeTerm] {
+  implicit val ArrowTypeMatch = new Match[IntArrowTypeTerm, ArrowType.Case[IntArrowTypeTerm, ?]] {
 
     implicit val TIsArrow_IntType =
       new IntType[λ[T => (IntArrowTypeTerm[T], Option[ArrowType.Case[IntArrowTypeTerm, T]])]] {

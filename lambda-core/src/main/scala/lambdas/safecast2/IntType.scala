@@ -24,14 +24,11 @@ object IntType {
     def tint: String = "TInt"
   }
 
-  trait Match[T[_]] {
-    def unapply[A](t: T[A]): Option[Case[A]]
-  }
-
-  implicit def IntTypeCast[T[_]: IntType](implicit IsInt: Match[T]) = new IntType[Cast.As[T, ?]] {
-    def tint = new Cast.As[T, Int] {
-      def apply[T2](t2: T[T2]): Option[Int Is T2] =
-        IsInt.unapply(t2) map (_.is.flip)
+  implicit def IntTypeCast[T[_]: IntType](implicit IsInt: Match[T, Case]) =
+    new IntType[Cast.As[T, ?]] {
+      def tint = new Cast.As[T, Int] {
+        def apply[T2](t2: T[T2]): Option[Int Is T2] =
+          IsInt.unapply(t2) map (_.is.flip)
+      }
     }
-  }
 }

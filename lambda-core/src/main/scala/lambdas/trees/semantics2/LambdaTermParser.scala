@@ -13,7 +13,7 @@ case class LambdaTermParser[P[_, _], T[_]: ArrowType: Cast](
     TypeParser: Interpreter[Tree, Either[String, ATypeTerm[T]]]
 )(
     implicit
-    AsArrow: ArrowType.Match[T],
+    AsArrow: Match[T, ArrowType.Case[T, ?]],
     S: ForAll0[T, cats.Show],
     L: Lambda[P]
 ) extends OpenInterpreter[Tree, Result[T, P]] {

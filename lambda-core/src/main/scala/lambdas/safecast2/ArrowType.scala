@@ -46,11 +46,7 @@ object ArrowType {
       s"$t1 -> $t2"
   }
 
-  trait Match[T[_]] {
-    def unapply[A](t: T[A]): Option[Case[T, A]]
-  }
-
-  implicit def ArrowTypeCast[T[_]: ArrowType](implicit IsArrow: Match[T]) =
+  implicit def ArrowTypeCast[T[_]: ArrowType](implicit IsArrow: Match[T, Case[T, ?]]) =
     new ArrowType[Cast.As[T, ?]] {
       def tarrow[T0, T1](t0: Cast.As[T, T0], t1: Cast.As[T, T1]) = new Cast.As[T, T0 => T1] {
         def apply[T2](t2: T[T2]): Option[(T0 => T1) Is T2] =
@@ -61,18 +57,4 @@ object ArrowType {
           } yield (eqT0, eqT1).lift2[Function1].andThen(result.is.flip)
       }
     }
-
-  // implicit def ArrowTypeCast[T[_], T0, T1](
-  //     implicit
-  //     C1: Cast[T, T0],
-  //     C2: Cast[T, T1],
-  //     IsArrow: Match[T]
-  // ) = new Cast[T, T0 => T1] {
-  //   def apply[T2](t2: T[T2]): Option[(T0 => T1) Is T2] =
-  //     for {
-  //       result <- IsArrow.unapply(t2)
-  //       eqT1   <- C1(result.is._1)
-  //       eqT2   <- C2(result.is._2)
-  //     } yield (eqT1, eqT2).lift2[Function1].andThen(result.is._3.flip)
-  // }
 }
