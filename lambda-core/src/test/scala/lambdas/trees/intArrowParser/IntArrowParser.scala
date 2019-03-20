@@ -1,19 +1,23 @@
 package lambdas
 package trees
-package semantics2
+package intArrowParser
 
 import syntax._
-import safecast2._
+import safecast._
 import interpreters._
+
+import arithmetic.IntType
+import tfdb.ArrowType
+import arithmetic.semantics.IntParser
 
 import tfdb._
 import arithmetic._, arithmetic.semantics.ShowArithFun
 
-import LambdaTermParser.Result
+import tfdb.semantics._, ArrowParser.Result
 
-object TermParser {
+object IntArrowParser {
 
-  case class IntTermParserLifted[T[_], P[_, _]]()(
+  case class IntParserLifted[T[_], P[_, _]]()(
       implicit
       F: ForAll[P, Arithmetic],
       S: ForAll0[T, cats.Show],
@@ -24,7 +28,7 @@ object TermParser {
       (tree: Tree) =>
         new Result[T, P] {
           def apply[Γ, E](γ: Γ)(implicit G: Gamma[Γ, E, T]) =
-            IntTermParser.parser[T, P[E, ?]](I, C, F[E], S)(rec andThen { _.apply(γ) })(tree)
+            IntParser.parser[T, P[E, ?]](I, C, F[E], S)(rec andThen { _.apply(γ) })(tree)
         }
   }
 
@@ -45,6 +49,6 @@ object TermParser {
 
   def apply[P[_, _]: Lambda: ForAll[?[_, _], Arithmetic]]
     : Interpreter[Tree, Result[IntArrowTypeTerm, P]] =
-    LambdaTermParser[P, IntArrowTypeTerm](TypeParser.apply) orElse
-    IntTermParserLifted[IntArrowTypeTerm, P]() close
+    ArrowParser[P, IntArrowTypeTerm](IntArrowTypeTermParser.apply) orElse
+    IntParserLifted[IntArrowTypeTerm, P]() close
 }

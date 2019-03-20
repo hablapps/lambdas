@@ -1,7 +1,8 @@
 package lambdas
-package safecast2
+package tfdb
 
 import cats.evidence._
+import safecast._
 
 trait ArrowType[T[_]] {
   def tarrow[T1, T2](t1: T[T1], t2: T[T2]): T[T1 => T2]
@@ -41,11 +42,6 @@ object ArrowType {
       }
   }
 
-  implicit val _ShowP = new ArrowType[ShowP] {
-    def tarrow[T1, T2](t1: String, t2: String): String =
-      s"$t1 -> $t2"
-  }
-
   implicit def ArrowTypeCast[T[_]: ArrowType](implicit IsArrow: Match[T, Case[T, ?]]) =
     new ArrowType[Cast.As[T, ?]] {
       def tarrow[T0, T1](t0: Cast.As[T, T0], t1: Cast.As[T, T1]) = new Cast.As[T, T0 => T1] {
@@ -57,4 +53,9 @@ object ArrowType {
           } yield (eqT0, eqT1).lift2[Function1].andThen(result.is.flip)
       }
     }
+
+  implicit val _ShowP = new ArrowType[ShowP] {
+    def tarrow[T1, T2](t1: String, t2: String): String =
+      s"$t1 -> $t2"
+  }
 }

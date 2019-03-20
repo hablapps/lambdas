@@ -19,16 +19,16 @@ class ShowSpec extends FunSpec with Matchers {
 
     it("works") {
 
-      ex1(0) shouldBe "1+3"
+      ex1(0) shouldBe "(1+3)"
 
       // ex2[Unit]((3, ()))(4) shouldBe 7
 
       // ex4((3, (4, ()))) shouldBe 7
 
-      ex3(0) shouldBe "(λx0.(x0 1)+2)"
+      ex3(0) shouldBe "(λx0.((x0 1)+2))"
 
       lam[Int, Int](x0 => add(x0)(int(1)))(0) shouldBe
-      "(λx0.x0+1)"
+      "(λx0.(x0+1))"
     }
   }
 }

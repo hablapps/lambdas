@@ -1,6 +1,6 @@
 package lambdas
-package trees
-package semantics2
+package tfdb
+package semantics
 
 import tfdb._, syntax._
 

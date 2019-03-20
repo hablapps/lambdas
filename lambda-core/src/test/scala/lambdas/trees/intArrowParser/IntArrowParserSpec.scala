@@ -1,30 +1,32 @@
 package lambdas
 package trees
-package semantics2
+package intArrowParser
 
-import safecast2._
+import arithmetic.IntType
+import tfdb.ArrowType, tfdb.semantics._
+import safecast._
 import syntax._
 
 import org.scalatest._
 
-class TermParserSpec extends FunSpec with Matchers with Inside {
+class IntArrowParserSpec extends FunSpec with Matchers with Inside {
 
   it("Int literals") {
-    inside(TermParser[ShowB].apply(tr_int(1))(())) {
+    inside(IntArrowParser[ShowB].apply(tr_int(1))(())) {
       case Right(DynLTerm(_, term)) =>
         term(0) shouldBe "1"
     }
   }
 
   it("Add expressions") {
-    inside(TermParser[ShowB].apply(tr_add(tr_int(1), tr_int(2)))(())) {
+    inside(IntArrowParser[ShowB].apply(tr_add(tr_int(1), tr_int(2)))(())) {
       case Right(DynLTerm(_, term)) =>
         term(0) shouldBe "(1+2)"
     }
   }
 
   it("Lambda expressions") {
-    inside(TermParser[ShowB].apply(tr_lam("v0", tr_tInt, tr_vr("v0")))(())) {
+    inside(IntArrowParser[ShowB].apply(tr_lam("v0", tr_tInt, tr_vr("v0")))(())) {
       case Right(DynLTerm(_, term)) =>
         term(0) shouldBe "(λx0.x0)"
     }
@@ -32,7 +34,7 @@ class TermParserSpec extends FunSpec with Matchers with Inside {
 
   it("App expressions") {
     inside(
-      TermParser[ShowB]
+      IntArrowParser[ShowB]
         .apply(tr_app(tr_lam("v0", tr_tInt, tr_vr("v0")), tr_int(1)))(())
     ) {
       case Right(DynLTerm(_, term)) =>
@@ -113,7 +115,7 @@ class TermParserSpec extends FunSpec with Matchers with Inside {
   it("Poly expressions") {
 
     inside(
-      TermParser[ArithLambdaTerm]
+      IntArrowParser[ArithLambdaTerm]
         .apply(tr_app(tr_lam("v0", tr_tInt, tr_vr("v0")), tr_int(1)))(())
     ) {
       case Right(DynLTerm(_, term)) =>
@@ -125,7 +127,7 @@ class TermParserSpec extends FunSpec with Matchers with Inside {
   it("Poly expressions (open)") {
 
     inside(
-      TermParser[ArithLambdaTerm]
+      IntArrowParser[ArithLambdaTerm]
         .apply(tr_add(tr_vr("v0"), tr_int(1)))(
           (Gamma.Var("v0", IntType[IntArrowTypeTerm].tint), ())
         )

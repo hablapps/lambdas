@@ -1,7 +1,8 @@
 package lambdas
-package safecast2
+package arithmetic
 
 import cats.evidence._
+import safecast._
 
 trait IntType[T[_]] {
   def tint: T[Int]
@@ -20,10 +21,6 @@ object IntType {
     }
   }
 
-  implicit val _ShowP = new IntType[ShowP] {
-    def tint: String = "TInt"
-  }
-
   implicit def IntTypeCast[T[_]: IntType](implicit IsInt: Match[T, Case]) =
     new IntType[Cast.As[T, ?]] {
       def tint = new Cast.As[T, Int] {
@@ -31,4 +28,8 @@ object IntType {
           IsInt.unapply(t2) map (_.is.flip)
       }
     }
+
+  implicit val _ShowP = new IntType[ShowP] {
+    def tint: String = "TInt"
+  }
 }

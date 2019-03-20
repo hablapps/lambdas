@@ -1,14 +1,16 @@
 package lambdas
 package trees
-package semantics2
+package intArrowParser
 
-import syntax._
-import safecast2._
 import cats.instances.string._
 
+import syntax._
+import safecast._
 import interpreters._
+import arithmetic.IntType
+import tfdb.ArrowType
 
-object TypeParser {
+object IntArrowTypeTermParser {
 
   val apply: Interpreter[Tree, Either[String, ATypeTerm[IntArrowTypeTerm]]] =
     ParseLambdaType orElse

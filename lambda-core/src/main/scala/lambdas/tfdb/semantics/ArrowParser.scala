@@ -1,15 +1,15 @@
 package lambdas
-package trees
-package semantics2
+package tfdb
+package semantics
 
-import syntax._
-import safecast2._
+import trees._, syntax._
+import safecast._
 import interpreters._
 
 import tfdb._
-import LambdaTermParser.Result
+import ArrowParser.Result
 
-case class LambdaTermParser[P[_, _], T[_]: ArrowType: Cast](
+case class ArrowParser[P[_, _], T[_]: ArrowType: Cast](
     TypeParser: Interpreter[Tree, Either[String, ATypeTerm[T]]]
 )(
     implicit
@@ -49,7 +49,7 @@ case class LambdaTermParser[P[_, _], T[_]: ArrowType: Cast](
       }
 }
 
-object LambdaTermParser {
+object ArrowParser {
 
   trait Result[T[_], P[_, _]] {
     def apply[Γ, E](γ: Γ)(implicit G: Gamma[Γ, E, T]): Either[String, DynTerm[T, P[E, ?]]]

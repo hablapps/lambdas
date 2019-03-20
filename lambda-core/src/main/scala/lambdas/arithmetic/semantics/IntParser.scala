@@ -1,13 +1,12 @@
 package lambdas
-package trees
-package semantics2
+package arithmetic
+package semantics
 
-import syntax._
-import safecast2._
+import safecast._
 import interpreters._
-import arithmetic._
+import trees._, syntax._
 
-object IntTermParser {
+object IntParser {
 
   def parser[T[_]: IntType: Cast, F[_]](
       implicit

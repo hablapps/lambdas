@@ -1,4 +1,4 @@
 package lambdas
-package trees
+package tfdb
 
 package object semantics extends DynLTermModule
