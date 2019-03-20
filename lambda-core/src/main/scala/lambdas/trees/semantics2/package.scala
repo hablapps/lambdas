@@ -1,4 +1,4 @@
-// package lambdas
-// package trees
+package lambdas
+package trees
 
-// package object semantics2 extends DynLTermModule
+package object semantics2 extends DynLTermModule

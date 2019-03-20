@@ -1,39 +1,41 @@
-// package lambdas
-// package trees
-// package semantics2
+package lambdas
+package trees
+package semantics2
 
-// import tfdb._, syntax._
-// import safecast.TypeTerm
+import tfdb._, syntax._
 
-// trait Gamma[Γ, E] {
-//   def findVar[P[_, _]: Lambda](name: String, gamma: Γ): Either[String, DynLTerm[P, E]]
-// }
+trait Gamma[Γ, E] {
+  def findVar[T[_], P[_, _]: Lambda](name: String, gamma: Γ): Either[String, DynLTerm[T, P, E]]
+}
 
-// object Gamma {
+object Gamma {
 
-//   case class Var[T](name: String, typ: TypeTerm[T])
+  case class Var[T[_], A](name: String, typ: T[A])
 
-//   implicit val notFound: Gamma[Unit, Unit] = new Gamma[Unit, Unit] {
-//     def findVar[P[_, _]: Lambda](name: String, gamma: Unit): Either[String, DynLTerm[P, Unit]] =
-//       Left(s"Var not found: $name")
-//   }
+  implicit val notFound: Gamma[Unit, Unit] = new Gamma[Unit, Unit] {
+    def findVar[T[_], P[_, _]: Lambda](
+        name: String,
+        gamma: Unit
+    ): Either[String, DynLTerm[T, P, Unit]] =
+      Left(s"Var not found: $name")
+  }
 
-//   implicit def foundVar[Γ, E, T](implicit G: Gamma[Γ, E]): Gamma[(Var[T], Γ), (T, E)] =
-//     new Gamma[(Var[T], Γ), (T, E)] {
+  implicit def foundVar[Γ, E, A](implicit G: Gamma[Γ, E]): Gamma[(Var[T, A], Γ), (A, E)] =
+    new Gamma[(Var[T, A], Γ), (A, E)] {
 
-//       def findVar[P[_, _]: Lambda](
-//           name: String,
-//           gamma: (Var[T], Γ)
-//       ): Either[String, DynLTerm[P, (T, E)]] =
-//         gamma match {
+      def findVar[T[_], A, P[_, _]: Lambda](
+          name: String,
+          gamma: (Var[T, A], Γ)
+      ): Either[String, DynLTerm[T, P, (A, E)]] =
+        gamma match {
 
-//           case (Var(_, typ), _) =>
-//             Right(DynLTerm(typ, vz[P, E, T]))
+          case (Var(_, typ), _) =>
+            Right(DynLTerm(typ, vz[P, E, T]))
 
-//           case (_, tail) =>
-//             for {
-//               dt <- G.findVar(name, tail).right
-//             } yield DynLTerm(dt.typ, vs(dt.term))
-//         }
-//     }
-// }
+          case (_, tail) =>
+            for {
+              dt <- G.findVar(name, tail).right
+            } yield DynLTerm(dt.typ, vs(dt.term))
+        }
+    }
+}
