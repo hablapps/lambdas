@@ -21,7 +21,9 @@ object IntType {
     }
   }
 
-  implicit def IntTypeCast[T[_]: IntType](implicit IsInt: Match[T, Case]) =
+  type Match[T[_]] = safecast.Match[T, Case]
+
+  implicit def IntTypeCast[T[_]: IntType](implicit IsInt: Match[T]) =
     new IntType[Cast.As[T, ?]] {
       def tint = new Cast.As[T, Int] {
         def apply[T2](t2: T[T2]): Option[Int Is T2] =

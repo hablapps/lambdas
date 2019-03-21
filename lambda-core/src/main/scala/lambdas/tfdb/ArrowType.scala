@@ -42,7 +42,9 @@ object ArrowType {
       }
   }
 
-  implicit def ArrowTypeCast[T[_]: ArrowType](implicit IsArrow: Match[T, Case[T, ?]]) =
+  type Match[T[_]] = safecast.Match[T, Case[T, ?]]
+
+  implicit def ArrowTypeCast[T[_]: ArrowType](implicit IsArrow: Match[T]) =
     new ArrowType[Cast.As[T, ?]] {
       def tarrow[T0, T1](t0: Cast.As[T, T0], t1: Cast.As[T, T1]) = new Cast.As[T, T0 => T1] {
         def apply[T2](t2: T[T2]): Option[(T0 => T1) Is T2] =

@@ -13,7 +13,7 @@ case class ArrowParser[P[_, _], T[_]: ArrowType: Cast](
     TypeParser: Interpreter[Tree, Either[String, ATypeTerm[T]]]
 )(
     implicit
-    AsArrow: Match[T, ArrowType.Case[T, ?]],
+    AsArrow: ArrowType.Match[T],
     S: ForAll0[T, cats.Show],
     L: Lambda[P]
 ) extends OpenInterpreter[Tree, Result[T, P]] {
@@ -28,16 +28,15 @@ case class ArrowParser[P[_, _], T[_]: ArrowType: Cast](
 
             case Lam(name, typ, body) =>
               for {
-                ty1 <- TypeParser.apply(typ)
-                db <- rec(body)
-                  .apply[(Gamma.Var[T, ty1.A], Γ), (ty1.A, E)]((Gamma.Var(name, ty1.typ), γ))
+                ty1 <- TypeParser(typ)
+                db  <- rec(body)((Gamma.Var(name, ty1.typ), γ))
               } yield DynLTerm(ArrowType[T].tarrow(ty1.typ, db.typ), L.lam(db.term))
 
             case App(ft, at) =>
               for {
-                df  <- rec(ft).apply(γ)
+                df  <- rec(ft)(γ)
                 asA <- AsArrow.unapply(df.typ).toEither(s"Not a lambda: ${S().show(df.typ)}")
-                da  <- rec(at).apply(γ)
+                da  <- rec(at)(γ)
                 _da <- da
                   .as(asA.t1)
                   .toEither(s"Wrong type: ${S().show(da.typ)} should be ${S().show(asA.t1)}")
@@ -55,4 +54,18 @@ object ArrowParser {
     def apply[Γ, E](γ: Γ)(implicit G: Gamma[Γ, E, T]): Either[String, DynTerm[T, P[E, ?]]]
   }
 
+  import cats.instances.string._
+
+  implicit class Ops[T[_], P[_, _]](sem1: OpenInterpreter[Tree, Result[T, P]]) {
+    def orElse(sem2: OpenInterpreter[Tree, Result[T, P]]) =
+      new OpenInterpreter[Tree, Result[T, P]] {
+        def apply(rec: => Tree => Result[T, P]): Tree => Result[T, P] =
+          (tree: Tree) =>
+            new Result[T, P] {
+              def apply[Γ, E](γ: Γ)(implicit G: Gamma[Γ, E, T]) =
+                sem1(rec)(tree).apply(γ) orElse
+                sem2(rec)(tree).apply(γ)
+            }
+      }
+  }
 }
