@@ -31,4 +31,9 @@ object IntParser {
           } yield DynTerm(IntType[T].tint, A.add(_dt1)(_dt2))
       }
     }(t => s"Not an int $t")
+
+  def forall[P[_, _]: ForAll[?[_, _], Arithmetic], T[_]: IntType: Cast: ForAll0[?[_], cats.Show]] =
+    new ForAll[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]] {
+      def apply[E] = parser[T, P[E, ?]]
+    }
 }

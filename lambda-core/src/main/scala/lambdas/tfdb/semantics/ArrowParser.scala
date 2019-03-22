@@ -68,4 +68,21 @@ object ArrowParser {
             }
       }
   }
+
+  case class Lifted[P[_, _], T[_]](
+      Parser: ForAll[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
+  ) extends OpenInterpreter[Tree, Result[T, P]] {
+    def apply(rec: => Interpreter[Tree, Result[T, P]]) =
+      (tree: Tree) =>
+        new Result[T, P] {
+          def apply[Γ, E](γ: Γ)(implicit G: Gamma[Γ, E, T]) =
+            Parser[E].apply(rec andThen (_(γ)))(tree)
+        }
+  }
+
+  implicit def lift[P[_, _], T[_]](
+      parser: ForAll[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
+  ) =
+    Lifted(parser)
+
 }
