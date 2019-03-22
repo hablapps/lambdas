@@ -2,10 +2,16 @@ package lambdas
 package intArrowParser
 
 import cats.evidence.Is
+import cats.instances.string._
 
-import safecast._
+import arithmetic.semantics._
 import arithmetic.IntType
+import tfdb.semantics._
 import tfdb.ArrowType
+
+import trees._
+import interpreters._
+import safecast._
 
 trait IntArrowType[A] {
   def apply[T[_]](implicit I: IntType[T], A: ArrowType[T]): T[A]
@@ -84,13 +90,6 @@ object IntArrowType {
         t[ShowP]
     }
   }
-
-  import interpreters._
-  import arithmetic.semantics._
-  import tfdb.semantics._
-  import trees._
-  import interpreters._
-  import cats.instances.string._
 
   val parser: Interpreter[Tree, Either[String, ATypeTerm[IntArrowType]]] =
     ArrowTypeParser[IntArrowType] orElse
