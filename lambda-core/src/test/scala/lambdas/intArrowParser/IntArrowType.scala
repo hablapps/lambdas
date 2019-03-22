@@ -14,14 +14,14 @@ import interpreters._
 import safecast._
 
 trait IntArrowType[A] {
-  def apply[T[_]](implicit I: IntType[T], A: ArrowType[T]): T[A]
+  def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[A]
 }
 
 object IntArrowType {
 
   implicit val _IntType = new IntType[IntArrowType] {
     def tint: IntArrowType[Int] = new IntArrowType[Int] {
-      def apply[T[_]](implicit I: IntType[T], A: ArrowType[T]): T[Int] =
+      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[Int] =
         I.tint
     }
   }
@@ -31,14 +31,14 @@ object IntArrowType {
         t1: IntArrowType[T1],
         t2: IntArrowType[T2]
     ): IntArrowType[T1 => T2] = new IntArrowType[T1 => T2] {
-      def apply[T[_]](implicit I: IntType[T], A: ArrowType[T]): T[T1 => T2] =
-        A.tarrow(t1(I, A), t2(I, A))
+      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[T1 => T2] =
+        R.tarrow(t1(I, R), t2(I, R))
     }
   }
 
   implicit val IntTypeMatch = new IntType.Match[IntArrowType] {
 
-    implicit val TIsInt_ArrowType = new ArrowType[λ[T => Option[IntType.Case[T]]]] {
+    implicit val TIsInt_ArrowType = new ArrowType[λ[A => Option[IntType.Case[A]]]] {
       def tarrow[T1, T2](
           t1: Option[IntType.Case[T1]],
           t2: Option[IntType.Case[T2]]

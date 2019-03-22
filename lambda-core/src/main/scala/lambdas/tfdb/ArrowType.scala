@@ -34,7 +34,7 @@ object ArrowType {
           (ArrowType[T].tarrow(ot1._1, ot2._1), Option(new Case[T, _T1 => _T2] {
             type T1 = _T1
             type T2 = _T2
-            // val ta =
+
             val t1 = ot1._1
             val t2 = ot2._1
             val is = Is.refl[T1 => T2]

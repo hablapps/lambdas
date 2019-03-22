@@ -9,6 +9,6 @@ import arithmetic._, arithmetic.semantics._
 object IntArrowParser {
 
   def apply[P[_, _]: Lambda: ForAll[?[_, _], Arithmetic]] =
-    ArrowParser[P, IntArrowType](IntArrowType.parser) orElse
+    ArrowParser(IntArrowType.parser) orElse
     IntParser.forall[P, IntArrowType] close
 }

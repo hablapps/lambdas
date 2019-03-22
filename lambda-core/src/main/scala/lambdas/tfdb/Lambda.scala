@@ -13,7 +13,8 @@ trait Lambda[P[E, T]] {
 object Lambda {
   def apply[P[E, T]](implicit L: Lambda[P]) = L
 
-  implicit val ShowSem: Lambda[ShowB]          = semantics.ShowSem
-  implicit val StdSem: Lambda[Function1]       = semantics.Standard
-  implicit val TermSem: Lambda[semantics.Term] = semantics.Term.TermLambda
+  implicit val ShowSem: Lambda[ShowB]                        = semantics.ShowSem
+  implicit val StdSem: Lambda[Function1]                     = semantics.Standard
+  implicit val TermSem: Lambda[semantics.Term]               = semantics.Term.TermLambda
+  implicit def TupledSem[P1[_, _]: Lambda, P2[_, _]: Lambda] = new semantics.TupledInstance[P1, P2]
 }

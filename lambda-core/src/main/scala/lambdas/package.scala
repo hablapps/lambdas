@@ -47,4 +47,12 @@ package object lambdas {
   type ShowB[E, T] = Int => String
   type Show[T]     = Int => String
   type ShowP[T]    = String
+
+  trait Tupled1[P1[_], P2[_]] {
+    type λ[A] = (P1[A], P2[A])
+  }
+
+  trait Tupled2[P1[_, _], P2[_, _]] {
+    type λ[E, A] = (P1[E, A], P2[E, A])
+  }
 }
