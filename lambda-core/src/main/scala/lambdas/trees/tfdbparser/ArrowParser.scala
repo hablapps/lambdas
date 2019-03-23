@@ -79,6 +79,8 @@ object ArrowParser {
         }
   }
 
+  import scala.language.implicitConversions
+
   implicit def lift[P[_, _], T[_]](
       parser: Forall[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
   ) =

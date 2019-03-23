@@ -85,6 +85,7 @@ object IntArrowType {
     }
   }
 
+  import scala.language.postfixOps
   import cats.instances.string._
   import interpreters._
   import trees._, arithparser._, tfdbparser._

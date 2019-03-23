@@ -1,6 +1,8 @@
 package lambdas
 package tfdbarith
 
+import scala.language.postfixOps
+
 import trees._, arithparser._, tfdbparser._, ArrowParser._
 import tfdb.Lambda
 import arithmetic.Arithmetic

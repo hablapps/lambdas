@@ -1,7 +1,9 @@
 package lambdas
 package interpreters
 
-trait OpenInterpreter[A, B] extends ((=> Interpreter[A, B]) => Interpreter[A, B]) {
+trait OpenInterpreter[A, B] {
+
+  def apply(f: => Interpreter[A, B]): Interpreter[A, B]
 
   def close: Interpreter[A, B] =
     fix(apply)
