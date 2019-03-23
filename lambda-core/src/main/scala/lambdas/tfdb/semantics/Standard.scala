@@ -4,12 +4,6 @@ package semantics
 
 object Standard extends Lambda[Function1] {
 
-  def int[E](i: Int): E => Int =
-    _ => i
-
-  def add[E](i1: E => Int, i2: E => Int): E => Int =
-    e => i1(e) + i2(e)
-
   def vz[E, T]: ((T, E)) => T =
     _._1
 

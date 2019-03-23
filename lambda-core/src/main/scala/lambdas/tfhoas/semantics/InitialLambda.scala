@@ -7,12 +7,6 @@ import initial.hoas.{ Lambda => ILambda, _ }
 class InitialLambda[P[_]] extends Lambda[({ type λ[T] = ILambda[P, T] })#λ] {
   // Lambda[ILambda[P, ?]] { //doesn't work?!
 
-  def int(i: Int): ILambda[P, Int] =
-    IntL(i)
-
-  def add(i1: ILambda[P, Int])(i2: ILambda[P, Int]): ILambda[P, Int] =
-    Add(i1, i2)
-
   def tuple[A, B](a: ILambda[P, A], b: ILambda[P, B]): ILambda[P, (A, B)] = ???
 
   def fst[A, B](t: ILambda[P, (A, B)]): ILambda[P, A] = ???

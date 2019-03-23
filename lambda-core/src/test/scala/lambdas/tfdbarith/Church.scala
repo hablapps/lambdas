@@ -38,17 +38,6 @@ object Church {
 
   implicit object ChurchLambda extends Lambda[Church] {
 
-    def int[E](i: Int) = new Church[E, Int] {
-      def apply[P[_, _]](implicit L: Lambda[P], A: Forall[P, Arithmetic]): P[E, Int] =
-        A[E].int(i)
-    }
-
-    def add[E](i1: Church[E, Int], i2: Church[E, Int]) =
-      new Church[E, Int] {
-        def apply[P[_, _]](implicit L: Lambda[P], A: Forall[P, Arithmetic]): P[E, Int] =
-          A[E].add(i1(L, A))(i2(L, A))
-      }
-
     def vz[E, T] = new Church[(T, E), T] {
       def apply[P[_, _]](implicit L: Lambda[P], A: Forall[P, Arithmetic]): P[(T, E), T] =
         L.vz
