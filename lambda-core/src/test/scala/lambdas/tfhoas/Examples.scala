@@ -1,9 +1,12 @@
 package lambdas
 package tfhoas
 
-case class Examples[P[_]]()(implicit L: Lambda[P]) {
+import arithmetic.Arithmetic
+
+case class Examples[P[_]]()(implicit L: Lambda[P], A: Arithmetic[P]) {
 
   import L._
+  import A._
 
   def ex1: P[Int] =
     add(int(1))(int(3))

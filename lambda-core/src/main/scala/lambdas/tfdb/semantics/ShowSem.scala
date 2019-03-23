@@ -4,12 +4,6 @@ package semantics
 
 object ShowSem extends Lambda[ShowB] {
 
-  def int[E](i: Int): Int => String =
-    _ => i.toString
-
-  def add[E](i1: Int => String, i2: Int => String): Int => String =
-    i => "(" + i1(i) + "+" + i2(i) + ")"
-
   def vz[E, T]: Int => String =
     i => {
       val n = if (i - 1 < 0) "y" else "x"
