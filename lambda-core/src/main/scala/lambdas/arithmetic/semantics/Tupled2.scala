@@ -4,9 +4,9 @@ package semantics
 
 class TupledInstance[P1[_, _], P2[_, _]](
     implicit
-    FA1: ForAll[P1, Arithmetic],
-    FA2: ForAll[P2, Arithmetic]
-) extends ForAll[Tupled2[P1, P2]#λ, Arithmetic] {
+    FA1: Forall[P1, Arithmetic],
+    FA2: Forall[P2, Arithmetic]
+) extends Forall[Tupled2[P1, P2]#λ, Arithmetic] {
 
   def apply[E] = new Arithmetic[Tupled2[P1, P2]#λ[E, ?]] {
     val T1 = new Tupled1Instance[P1[E, ?], P2[E, ?]]

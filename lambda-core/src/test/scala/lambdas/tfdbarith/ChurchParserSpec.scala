@@ -1,5 +1,5 @@
 package lambdas
-package intArrowParser
+package tfdbarith
 
 import arithmetic.IntType
 import trees._, tfdbparser._, arithparser._

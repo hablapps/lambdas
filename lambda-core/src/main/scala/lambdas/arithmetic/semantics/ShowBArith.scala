@@ -2,7 +2,7 @@ package lambdas
 package arithmetic
 package semantics
 
-object ShowBArith extends ForAll[ShowB, Arithmetic] {
+object ShowBArith extends Forall[ShowB, Arithmetic] {
   def apply[E] = new Arithmetic[ShowB[E, ?]] {
     def int(i: Int): ShowB[E, Int] =
       ShowArithFun.int(i)

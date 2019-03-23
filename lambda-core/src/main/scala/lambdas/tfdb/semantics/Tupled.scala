@@ -5,15 +5,6 @@ package semantics
 class TupledInstance[P1[_, _], P2[_, _]](implicit L1: Lambda[P1], L2: Lambda[P2])
     extends Lambda[Tupled2[P1, P2]#λ] {
 
-  def int[E](i: Int): (P1[E, Int], P2[E, Int]) =
-    (L1.int(i), L2.int(i))
-
-  def add[E](
-      i1: (P1[E, Int], P2[E, Int]),
-      i2: (P1[E, Int], P2[E, Int])
-  ): (P1[E, Int], P2[E, Int]) =
-    (L1.add(i1._1, i2._1), L2.add(i1._2, i2._2))
-
   def vz[E, T]: (P1[(T, E), T], P2[(T, E), T]) =
     (L1.vz, L2.vz)
 

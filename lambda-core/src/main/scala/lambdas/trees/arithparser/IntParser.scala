@@ -11,7 +11,7 @@ object IntParser {
   def parser[T[_]: IntType: Cast, F[_]](
       implicit
       A: Arithmetic[F],
-      S: ForAll0[T, cats.Show]
+      S: Forall0[T, cats.Show]
   ) =
     OpenInterpreter[Tree, String, DynTerm[T, F]] { rec =>
       {
@@ -32,8 +32,8 @@ object IntParser {
       }
     }(t => s"Not an int $t")
 
-  def forall[P[_, _]: ForAll[?[_, _], Arithmetic], T[_]: IntType: Cast: ForAll0[?[_], cats.Show]] =
-    new ForAll[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]] {
+  def forall[P[_, _]: Forall[?[_, _], Arithmetic], T[_]: IntType: Cast: Forall0[?[_], cats.Show]] =
+    new Forall[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]] {
       def apply[E] = parser[T, P[E, ?]]
     }
 }

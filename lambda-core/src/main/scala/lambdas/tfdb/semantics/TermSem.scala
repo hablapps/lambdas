@@ -10,16 +10,6 @@ object Term {
 
   object TermLambda extends Lambda[Term] {
 
-    def int[E](i: Int) = new Term[E, Int] {
-      def apply[P[_, _]](implicit L: Lambda[P]): P[E, Int] =
-        L.int(i)
-    }
-
-    def add[E](i1: Term[E, Int], i2: Term[E, Int]) = new Term[E, Int] {
-      def apply[P[_, _]](implicit L: Lambda[P]): P[E, Int] =
-        L.add(i1(L), i2(L))
-    }
-
     def vz[E, T] = new Term[(T, E), T] {
       def apply[P[_, _]](implicit L: Lambda[P]): P[(T, E), T] =
         L.vz

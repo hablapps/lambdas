@@ -20,7 +20,7 @@ object Arithmetic extends LPI {
   implicit val ArithmeticShow      = semantics.ShowArithFun
   implicit val ArithmeticShowB     = semantics.ShowBArith
   implicit val ArithmeticFunction1 = semantics.Function1Arith
-  implicit def TupledSem[P1[_, _]: ForAll[?[_, _], Arithmetic], P2[_, _]: ForAll[
+  implicit def TupledSem[P1[_, _]: Forall[?[_, _], Arithmetic], P2[_, _]: Forall[
     ?[_, _],
     Arithmetic
   ]] =
@@ -29,6 +29,6 @@ object Arithmetic extends LPI {
 
 trait LPI {
 
-  implicit def ArithForall[E, P[_, _]](implicit FA: ForAll[P, Arithmetic]): Arithmetic[P[E, ?]] =
+  implicit def ArithForall[E, P[_, _]](implicit FA: Forall[P, Arithmetic]): Arithmetic[P[E, ?]] =
     FA[E]
 }

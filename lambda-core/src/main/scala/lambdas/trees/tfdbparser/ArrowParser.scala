@@ -13,7 +13,7 @@ case class ArrowParser[P[_, _], T[_]: ArrowType: Cast](
 )(
     implicit
     AsArrow: ArrowType.Match[T],
-    S: ForAll0[T, cats.Show],
+    S: Forall0[T, cats.Show],
     L: Lambda[P]
 ) extends OpenInterpreter[Tree, Result[T, P]] {
 
@@ -69,7 +69,7 @@ object ArrowParser {
   }
 
   case class Lifted[P[_, _], T[_]](
-      Parser: ForAll[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
+      Parser: Forall[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
   ) extends OpenInterpreter[Tree, Result[T, P]] {
     def apply(rec: => Interpreter[Tree, Result[T, P]]) =
       (tree: Tree) =>
@@ -80,7 +80,7 @@ object ArrowParser {
   }
 
   implicit def lift[P[_, _], T[_]](
-      parser: ForAll[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
+      parser: Forall[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
   ) =
     Lifted(parser)
 

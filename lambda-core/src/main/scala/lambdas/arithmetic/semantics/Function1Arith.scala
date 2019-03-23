@@ -2,7 +2,7 @@ package lambdas
 package arithmetic
 package semantics
 
-object Function1Arith extends ForAll[Function1, Arithmetic] {
+object Function1Arith extends Forall[Function1, Arithmetic] {
   def apply[E] = new Arithmetic[Function1[E, ?]] {
     def int(i: Int): Function1[E, Int] = _ => ArithmeticId.int(i)
 

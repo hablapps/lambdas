@@ -1,5 +1,5 @@
 package lambdas
-package intArrowParser
+package tfdbarith
 
 import tfdb.ArrowType
 import arithmetic.IntType
@@ -78,7 +78,7 @@ object IntArrowType {
       }
   }
 
-  implicit val _ForallShow = new ForAll0[IntArrowType, cats.Show] {
+  implicit val _ForallShow = new Forall0[IntArrowType, cats.Show] {
     def apply[A]() = new cats.Show[IntArrowType[A]] {
       def show(t: IntArrowType[A]): String =
         t[ShowP]
