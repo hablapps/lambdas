@@ -1,29 +1,35 @@
-name := "gist"
+name := "lambdas"
 
-scalaVersion := "2.12.7"
+scalaVersion := "2.12.8"
 
 scalaBinaryVersion := "2.12"
 
 organization := "org.hablapps"
 
-version := "0.1-SNAPSHOT"
+version := "0.1.1"
 
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
+import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
+scalafmtOnCompile in ThisBuild := true
 
-libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "3.0.0",
-  "org.typelevel" %% "cats" % "0.9.0",
-  "org.scalaz" %% "scalaz-core" % "7.2.7"
-)
+lazy val lambdas = project
+  .in(file("."))
+  .aggregate(
+    `lambda-core`
+  )
 
-scalacOptions ++= Seq(
-  "-unchecked",
-  "-deprecation",
-  // "-Ypartial-unification",
-  // "-Xprint:typer",
-  // "-Xlog-implicit-conversions",
-  "-feature",
-  "-language:existentials",
-  "-language:implicitConversions",
-  "-language:postfixOps",
-  "-language:higherKinds")
+lazy val `lambda-core` = project
+  .settings(
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.0.0",
+      "org.typelevel" %% "cats-core" % "1.6.0"
+    ),
+    scalacOptions ++= Seq(
+      "-Ywarn-unused-import",
+      "-unchecked",
+      "-deprecation",
+      "-feature",
+      "-language:existentials",
+      "-language:implicitConversions",
+      "-language:postfixOps",
+      "-language:higherKinds"))
