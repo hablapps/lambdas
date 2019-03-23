@@ -6,12 +6,6 @@ import trees._
 
 object TreeSer extends Lambda[({ type λ[T] = Const[Tree, T] })#λ] {
 
-  def int(i: Int): Const[Tree, Int] =
-    ???
-
-  def add(i1: Const[Tree, Int])(i2: Const[Tree, Int]): Const[Tree, Int] =
-    ???
-
   def tuple[A, B](a: Const[Tree, A], b: Const[Tree, B]): Const[Tree, (A, B)] =
     ???
 

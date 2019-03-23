@@ -4,12 +4,6 @@ package semantics
 
 object ShowLambda extends Lambda[Show] {
 
-  def int(i: Int): Show[String] =
-    _ => i.toString
-
-  def add(i1: Show[String])(i2: Show[String]): Show[String] =
-    c => s"${i1(c)}+${i2(c)}"
-
   def tuple[A, B](a: Show[A], b: Show[B]): Show[(A, B)] =
     (i: Int) => "(" + a(i) + ", " + b(i) + ").tuple"
 
