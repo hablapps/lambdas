@@ -1,8 +1,8 @@
 package lambdas
-package tfdb
-package semantics
+package trees
+package tfdbparser
 
-import trees._, syntax._
+import _root_.lambdas.tfdb._
 import safecast._
 import interpreters._
 

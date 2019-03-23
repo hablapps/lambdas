@@ -1,7 +1,7 @@
 package lambdas
 package trees
 
-import syntax._
+import tfdbparser._, arithparser._
 
 import org.scalatest._
 

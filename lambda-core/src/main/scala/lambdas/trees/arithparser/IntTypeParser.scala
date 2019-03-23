@@ -1,10 +1,10 @@
 package lambdas
-package arithmetic
-package semantics
+package trees
+package arithparser
 
 import interpreters._
 import safecast._
-import trees._, syntax._
+import _root_.lambdas.arithmetic._
 
 object IntTypeParser {
 

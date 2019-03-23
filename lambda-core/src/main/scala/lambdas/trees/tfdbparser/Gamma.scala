@@ -1,8 +1,9 @@
 package lambdas
-package tfdb
-package semantics
+package trees
+package tfdbparser
 
-import tfdb._, syntax._
+import _root_.lambdas.tfdb._
+import syntax._
 
 trait Gamma[Γ, E, T[_]] {
   def findVar[P[_, _]: Lambda](name: String, gamma: Γ): Either[String, DynLTerm[T, P, E]]

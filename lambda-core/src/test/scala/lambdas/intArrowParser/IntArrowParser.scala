@@ -1,10 +1,9 @@
 package lambdas
 package intArrowParser
 
-import trees._
-import interpreters._
-import tfdb._, tfdb.semantics._, ArrowParser._
-import arithmetic._, arithmetic.semantics._
+import trees._, arithparser._, tfdbparser._, ArrowParser._
+import tfdb.Lambda
+import arithmetic.Arithmetic
 
 object IntArrowParser {
 

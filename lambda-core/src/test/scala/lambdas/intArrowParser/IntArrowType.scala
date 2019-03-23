@@ -1,17 +1,8 @@
 package lambdas
 package intArrowParser
 
-import cats.evidence.Is
-import cats.instances.string._
-
-import arithmetic.semantics._
-import arithmetic.IntType
-import tfdb.semantics._
 import tfdb.ArrowType
-
-import trees._
-import interpreters._
-import safecast._
+import arithmetic.IntType
 
 trait IntArrowType[A] {
   def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[A]
@@ -61,6 +52,9 @@ object IntArrowType {
       t[λ[T => (IntArrowType[T], Option[ArrowType.Case[IntArrowType, T]])]]._2
   }
 
+  import safecast._
+  import cats.evidence.Is
+
   implicit val _Cast = new Cast[IntArrowType] {
     def apply[T1, T2](t1: IntArrowType[T1], t2: IntArrowType[T2]): Option[T1 Is T2] =
       t1[Cast.As[IntArrowType, ?]].apply(t2)
@@ -90,6 +84,10 @@ object IntArrowType {
         t[ShowP]
     }
   }
+
+  import cats.instances.string._
+  import interpreters._
+  import trees._, arithparser._, tfdbparser._
 
   val parser: Interpreter[Tree, Either[String, ATypeTerm[IntArrowType]]] =
     ArrowTypeParser[IntArrowType] orElse

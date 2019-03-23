@@ -1,10 +1,8 @@
 package lambdas
 package intArrowParser
 
-import safecast._
-import trees._, syntax._
-import arithmetic.{ Arithmetic, IntType }
-import tfdb.{ ArrowType, Lambda }, tfdb.semantics._
+import arithmetic.Arithmetic
+import tfdb.Lambda
 
 trait Church[E, T] {
   def apply[P[_, _]](implicit L: Lambda[P], A: ForAll[P, Arithmetic]): P[E, T]

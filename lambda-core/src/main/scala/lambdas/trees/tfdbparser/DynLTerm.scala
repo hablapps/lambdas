@@ -1,6 +1,6 @@
 package lambdas
-package tfdb
-package semantics
+package trees
+package tfdbparser
 
 import safecast._
 
