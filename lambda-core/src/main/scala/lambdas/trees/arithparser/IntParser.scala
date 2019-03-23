@@ -4,7 +4,7 @@ package arithparser
 
 import safecast._
 import interpreters._
-import _root_.lambdas.arithmetic._
+import arithmetic._
 
 object IntParser {
 

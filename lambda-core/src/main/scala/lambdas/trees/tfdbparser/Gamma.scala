@@ -2,7 +2,7 @@ package lambdas
 package trees
 package tfdbparser
 
-import _root_.lambdas.tfdb._
+import tfdb._
 import syntax._
 
 trait Gamma[Γ, E, T[_]] {
