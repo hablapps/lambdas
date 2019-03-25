@@ -24,7 +24,6 @@ object Lambda {
 
   def apply[P[_]](implicit L: Lambda[P]) = L
 
-  implicit val ShowSem: Lambda[Show] = semantics.ShowLambda
-
+  implicit val ShowSem: Lambda[Show]   = semantics.ShowLambda
   implicit val StdSem: Lambda[cats.Id] = semantics.Std
 }
