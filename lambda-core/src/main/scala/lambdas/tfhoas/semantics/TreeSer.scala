@@ -4,10 +4,6 @@
 // import cats.data.Const
 // import trees._
 
-// sealed abstract class TreeSer[A]
-// case class Unk[A](t: Int => Tree)                             extends TreeSer[A]
-// case class LamVar[A, B, TreeSer[B]](body: Tree => TreeSer[B]) extends TreeSer[A => B]
-
 // object TreeSer {
 //   import Constructors._
 
