@@ -4,8 +4,7 @@ package semantics
 
 import initial.hoas.{ Lambda => ILambda, _ }
 
-class InitialLambda[P[_]] extends Lambda[({ type λ[T] = ILambda[P, T] })#λ] {
-  // Lambda[ILambda[P, ?]] { //doesn't work?!
+class InitialLambda[P[_]] extends tfhoas.Lambda[ILambda[P, ?]] {
 
   def tuple[A, B](a: ILambda[P, A], b: ILambda[P, B]): ILambda[P, (A, B)] = ???
 

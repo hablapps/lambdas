@@ -5,18 +5,6 @@ package semantics
 import trees._
 import tfdb.ArrowType
 
-trait Treeable[T[_]] {
-  def show[A](t: T[A]): Tree
-}
-
-trait TypeSummoner[T[_]] {
-  def Type[A](implicit T: T[A]) = T
-}
-
-object Treeable {
-  def apply[T[_]](implicit T: Treeable[T]) = T
-}
-
 abstract class ShowTree[Type[_], A] extends (Int => (Tree, Type[A]))
 
 object ShowTree {
@@ -25,10 +13,13 @@ object ShowTree {
     def apply(i: Int) = f(i)
   }
 
-  import Constructors._
+  trait TypeSummoner[T[_]] {
+    def Type[A](implicit T: T[A]) = T
+  }
 
   implicit def _Lambda[Type[_]: ArrowType: Treeable] =
     new tfhoast.Lambda[Type, ShowTree[Type, ?]] with TypeSummoner[Type] {
+      import Constructors._
 
       def lam[A: Type, B: Type](f: ShowTree[Type, A] => ShowTree[Type, B]): ShowTree[Type, A => B] =
         ShowTree((i: Int) => {
