@@ -34,12 +34,12 @@ object TreeSer {
   implicit def _Lam[E, T1, T2, L <: Lambda[(T1, E), T2], Type[_]](
       implicit
       S: TreeSer[(T1, E), T2, L],
-      Type1: Typeable.Aux[T1, Type],
+      Type1: shapeless.Lazy[Typeable.Aux[T1, Type]],
       Ser: Treeable[Type]
   ) =
     new TreeSer[E, T1 => T2, Lam[E, T1, T2, L]] {
       def apply(l: Lam[E, T1, T2, L]): Int => Tree =
-        i => tr_lam(s"x$i", Ser.show(Type1.T), S(l.body)(i + 1))
+        i => tr_lam(s"x$i", Ser.show(Type1.value.T), S(l.body)(i + 1))
     }
 
   implicit def _App[E, T1, T2, Lf <: Lambda[E, T1 => T2], L1 <: Lambda[E, T1]](
