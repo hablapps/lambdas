@@ -1,9 +1,10 @@
 package lambdas
 package tfdbarith
 
-import trees._, tfdbparser._, arithparser._
+import trees._, tfdbparser._
 
 import org.scalatest._
+import TreeSerializer._
 
 class ShowParserSpec extends FunSpec with Matchers with Inside {
 

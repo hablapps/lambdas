@@ -16,7 +16,7 @@ object TreeSer {
   )(implicit S: TreeSer[E, T, L]): Int => Tree =
     S(l)
 
-  import Constructors._
+  import tfhoas.semantics.Serializer.Constructors._
 
   implicit def _Vz[E, T] = new TreeSer[(T, E), T, Vz[E, T]] {
     def apply(l: Lambda[(T, E), T, Vz[E, T]]): Int => Tree =
@@ -61,20 +61,4 @@ object TreeSer {
           case App(f, t1) => tr_app(Sf(f)(i), S1(t1)(i))
         }
   }
-
-  object Constructors {
-
-    def tr_vr(name: String): Tree =
-      Node("Var", List(Leaf(name)))
-
-    def tr_lam(name: String, typ: Tree, body: Tree): Tree =
-      Node("Lam", List(Leaf(name), typ, body))
-
-    def tr_app(f: Tree, a: Tree): Tree =
-      Node("App", List(f, a))
-
-    def tr_tArr(t1: Tree, t2: Tree): Tree =
-      Node("TArr", List(t1, t2))
-  }
-
 }

@@ -37,13 +37,15 @@ object IntType {
 
   import trees._, Treeable.ShowTree
 
-  object Constructors {
-    def tr_tint: Tree =
+  trait Constructors {
+    def tr_tInt: Tree =
       Leaf("TInt")
   }
 
+  object Constructors extends Constructors
+
   implicit def _ShowTree = new IntType[ShowTree] {
     def tint: Int => Tree =
-      _ => Constructors.tr_tint
+      _ => Constructors.tr_tInt
   }
 }

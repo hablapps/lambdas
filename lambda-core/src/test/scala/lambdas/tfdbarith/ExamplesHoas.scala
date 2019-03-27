@@ -1,7 +1,7 @@
 package lambdas
 package tfdbarith
 
-import tfhoast.Lambda
+import tfhoas.Lambda
 import arithmetic.Arithmetic
 
 case class ExamplesHoas[Type[_]: ArrowType, P[_]]()(

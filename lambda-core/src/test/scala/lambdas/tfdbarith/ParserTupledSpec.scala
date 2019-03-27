@@ -1,7 +1,7 @@
 package lambdas
 package tfdbarith
 
-import trees._, tfdbparser._, arithparser._
+import TreeSerializer._
 
 import org.scalatest._
 

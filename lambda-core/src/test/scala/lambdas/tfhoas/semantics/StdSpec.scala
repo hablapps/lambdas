@@ -6,7 +6,8 @@ import org.scalatest._
 
 class StdSpec extends FunSpec with Matchers {
 
-  val L = Examples[cats.Id]()
+  import tfdbarith.IntArrowType
+  val L = Examples[IntArrowType, cats.Id]()
   import L._
 
   describe("Evaluate lambda expressions - tagless final - HOAS") {

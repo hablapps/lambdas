@@ -1,33 +1,36 @@
 package lambdas
 package tfhoas
 
-trait Lambda[P[_]] {
+abstract class Lambda[Type[_]: ArrowType, P[_]] {
 
-  def lam[T1, T2](f: P[T1] => P[T2]): P[T1 => T2]
+  def lam[A: Type, B: Type](f: P[A] => P[B]): P[A => B]
 
-  def app[T1, T2](f: P[T1 => T2])(t1: P[T1]): P[T2]
+  def app[A: Type, B: Type](f: P[A => B])(t1: P[A]): P[B]
 
   // Products
 
-  def tuple[A, B](a: P[A], b: P[B]): P[(A, B)]
+  def tuple[A: Type, B: Type](a: P[A], b: P[B]): P[(A, B)]
 
-  def fst[A, B](t: P[(A, B)]): P[A]
+  def fst[A: Type, B: Type](t: P[(A, B)]): P[A]
 
-  def snd[A, B](t: P[(A, B)]): P[B]
+  def snd[A: Type, B: Type](t: P[(A, B)]): P[B]
 
   // Auxiliary
 
-  def lam2[A, B, C](f: (P[A], P[B]) => P[C]): P[(A, B) => C]
+  def lam2[A: Type, B: Type, C: Type](f: (P[A], P[B]) => P[C]): P[(A, B) => C]
 
-  def curried[A, B, C](f: P[(A, B) => C]): P[A => B => C]
+  def curried[A: Type, B: Type, C: Type](f: P[(A, B) => C]): P[A => B => C]
 
-  def tupled[A, B, C](f: P[(A, B) => C]): P[((A, B)) => C]
+  def tupled[A: Type, B: Type, C: Type](f: P[(A, B) => C]): P[((A, B)) => C]
+
 }
 
 object Lambda {
 
-  def apply[P[_]](implicit L: Lambda[P]) = L
+  def apply[Type[_], P[_]](implicit L: Lambda[Type, P]) = L
 
-  implicit val ShowSem: Lambda[Show]   = semantics.ShowLambda
-  implicit val StdSem: Lambda[cats.Id] = semantics.Std
+  import trees.Treeable
+  implicit def _Serializer[Type[_]: ArrowType: Treeable] = new semantics.Serializer[Type]
+  implicit def _Show[Type[_]: ArrowType]                 = new semantics.ShowLambda[Type]
+  implicit def _Standard[Type[_]: ArrowType]             = new semantics.Standard[Type]
 }

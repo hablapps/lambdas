@@ -2,24 +2,7 @@ package lambdas
 package trees
 package tfdbparser
 
-trait Syntax extends Constructors with Destructors
-
-trait Constructors {
-
-  def tr_vr(name: String): Tree =
-    Node("Var", List(Leaf(name)))
-
-  def tr_lam(name: String, typ: Tree, body: Tree): Tree =
-    Node("Lam", List(Leaf(name), typ, body))
-
-  def tr_app(f: Tree, a: Tree): Tree =
-    Node("App", List(f, a))
-
-  def tr_tArr(t1: Tree, t2: Tree): Tree =
-    Node("TArr", List(t1, t2))
-}
-
-trait Destructors {
+trait Syntax {
 
   object Var {
     def unapply(t: Tree): Option[String] =

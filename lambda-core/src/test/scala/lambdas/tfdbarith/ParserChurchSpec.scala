@@ -2,7 +2,8 @@ package lambdas
 package tfdbarith
 
 import arithmetic.IntType
-import trees._, tfdbparser._, arithparser._
+import trees._, tfdbparser._
+import TreeSerializer._
 
 import org.scalatest._
 

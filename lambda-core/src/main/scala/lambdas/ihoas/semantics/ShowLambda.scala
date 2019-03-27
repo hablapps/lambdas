@@ -5,6 +5,6 @@ package semantics
 
 object ShowLambda {
 
-  def apply[T](l: Lambda[Show, T]): Show[T] =
-    FinallyLambda[Show].apply(l)
+  def apply[Type[_]: ArrowType, T](l: Lambda[Type, Show, T]): Show[T] =
+    FinallyLambda[Type, Show].apply(l)
 }

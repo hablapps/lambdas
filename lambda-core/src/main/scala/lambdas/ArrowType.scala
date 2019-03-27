@@ -62,10 +62,12 @@ object ArrowType {
 
   import trees._, Treeable.ShowTree
 
-  object Constructors {
+  trait Constructors {
     def tr_tArr(t1: Tree, t2: Tree): Tree =
       Node("TArr", List(t1, t2))
   }
+
+  object Constructors extends Constructors
 
   implicit def _ShowTree = new ArrowType[ShowTree] {
     def tarrow[T1, T2](t1: ShowTree[T1], t2: ShowTree[T2]): ShowTree[T1 => T2] =

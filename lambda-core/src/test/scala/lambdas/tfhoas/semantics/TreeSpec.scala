@@ -1,5 +1,5 @@
 package lambdas
-package tfhoast
+package tfhoas
 package semantics
 
 import org.scalatest._
@@ -14,7 +14,7 @@ class TreeSpec extends FunSpec with Matchers {
       Leaf("TInt")
   }
 
-  val L = Lambda[IntArrowType, ShowTree](Serializer._Lambda[IntArrowType])
+  val L = Lambda[IntArrowType, ShowTree]
   import L._
 
   implicit val _IntType = arithmetic.IntType[IntArrowType].tint

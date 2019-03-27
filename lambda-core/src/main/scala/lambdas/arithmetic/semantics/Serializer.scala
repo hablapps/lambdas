@@ -20,7 +20,7 @@ object Serializer extends Arithmetic[ShowTree] {
   def + : ShowTree[(Int, Int) => Int] =
     _ => Leaf("+")
 
-  object Constructors {
+  trait Constructors {
     def tr_int(i: Int): Tree =
       Node("Int", List(Leaf(i.toString)))
 
@@ -28,4 +28,5 @@ object Serializer extends Arithmetic[ShowTree] {
       Node("Add", List(i, j))
   }
 
+  object Constructors extends Constructors
 }
