@@ -1,7 +1,7 @@
 package lambdas
 package tfdbarith
 
-import trees._, Treeable.ShowTree
+import trees._, TreeSerializable.ShowTree
 
 import org.scalatest._
 

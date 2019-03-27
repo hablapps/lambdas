@@ -14,7 +14,7 @@
 
 //   import tfdbarith.IntArrowType
 
-//   implicit def _IntArrowType = new Treeable[IntArrowType] {
+//   implicit def _IntArrowType = new TreeSerializable[IntArrowType] {
 //     def show[A](t: IntArrowType[A]) =
 //       Leaf("TInt")
 //   }

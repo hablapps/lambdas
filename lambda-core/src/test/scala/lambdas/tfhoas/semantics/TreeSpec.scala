@@ -4,12 +4,12 @@ package semantics
 
 import org.scalatest._
 
-import trees._, Treeable.ShowTree
+import trees._, TreeSerializable.ShowTree
 import tfdbarith.IntArrowType
 
 class TreeSpec extends FunSpec with Matchers {
 
-  implicit def _IntArrowType = new Treeable[IntArrowType] {
+  implicit def _IntArrowType = new TreeSerializable[IntArrowType] {
     def show[A](t: IntArrowType[A]) =
       Leaf("TInt")
   }

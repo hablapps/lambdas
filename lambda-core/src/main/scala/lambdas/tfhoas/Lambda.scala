@@ -29,8 +29,8 @@ object Lambda {
 
   def apply[Type[_], P[_]](implicit L: Lambda[Type, P]) = L
 
-  import trees.Treeable
-  implicit def _Serializer[Type[_]: ArrowType: Treeable] = new semantics.Serializer[Type]
-  implicit def _Show[Type[_]: ArrowType]                 = new semantics.ShowLambda[Type]
-  implicit def _Standard[Type[_]: ArrowType]             = new semantics.Standard[Type]
+  import trees.TreeSerializable
+  implicit def _Serializer[Type[_]: ArrowType: TreeSerializable] = new semantics.Serializer[Type]
+  implicit def _Show[Type[_]: ArrowType]                         = new semantics.ShowLambda[Type]
+  implicit def _Standard[Type[_]: ArrowType]                     = new semantics.Standard[Type]
 }

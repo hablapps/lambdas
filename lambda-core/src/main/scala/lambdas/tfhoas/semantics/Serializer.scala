@@ -3,9 +3,9 @@ package tfhoas
 package semantics
 
 import safecast.TypeSummoner
-import trees._, Treeable.ShowTree
+import trees._, TreeSerializable.ShowTree
 
-class Serializer[Type[_]: ArrowType: Treeable]
+class Serializer[Type[_]: ArrowType: TreeSerializable]
     extends tfhoas.Lambda[Type, ShowTree]
     with TypeSummoner[Type] {
 
@@ -16,7 +16,7 @@ class Serializer[Type[_]: ArrowType: Treeable]
       val x = "x" + i
       tr_lam(
         x,
-        Treeable[Type].show(Type[A]),
+        TreeSerializable[Type].show(Type[A]),
         f((_: Int) => tr_vr(x))(i + 1)
       )
     }
@@ -47,9 +47,9 @@ class Serializer[Type[_]: ArrowType: Treeable]
       val y = "x" + i + 1
       tr_lam2(
         x,
-        Treeable[Type].show(Type[A]),
+        TreeSerializable[Type].show(Type[A]),
         y,
-        Treeable[Type].show(Type[B]),
+        TreeSerializable[Type].show(Type[B]),
         f((_: Int) => tr_vr(x), (_: Int) => tr_vr(y))(i + 2)
       )
     }

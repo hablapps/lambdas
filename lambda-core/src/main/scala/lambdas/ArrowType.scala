@@ -60,7 +60,7 @@ object ArrowType {
       s"$t1 -> $t2"
   }
 
-  import trees._, Treeable.ShowTree
+  import trees._, TreeSerializable.ShowTree
 
   trait Constructors {
     def tr_tArr(t1: Tree, t2: Tree): Tree =

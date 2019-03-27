@@ -40,7 +40,7 @@ object TreeSer {
       implicit
       S: TreeSer[(T1, E), T2, L],
       Type1: shapeless.Lazy[Typeable.Aux[T1, Type]],
-      Ser: Treeable[Type]
+      Ser: TreeSerializable[Type]
   ) =
     new TreeSer[E, T1 => T2, Lam[E, T1, T2, L]] {
       def apply(l: Lambda[E, T1 => T2, Lam[E, T1, T2, L]]): Int => Tree =

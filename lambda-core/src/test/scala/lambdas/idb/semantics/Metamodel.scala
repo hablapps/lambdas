@@ -14,7 +14,7 @@ object Metamodel {
 
     import trees._
 
-    implicit val _Treeable = new Treeable[IntStringType] {
+    implicit val _TreeSerializable = new TreeSerializable[IntStringType] {
       def show[T](T: IntStringType[T]): Tree = T match {
         case IntType    => Leaf("TInt")
         case StringType => Leaf("TString")

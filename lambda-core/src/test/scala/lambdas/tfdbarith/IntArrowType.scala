@@ -98,9 +98,9 @@ object IntArrowType {
     ArrowTypeParser[IntArrowType] orElse
     IntTypeParser[IntArrowType] close
 
-  import trees._, Treeable.ShowTree
+  import trees._, TreeSerializable.ShowTree
 
-  implicit val serializer = new Treeable[IntArrowType] {
+  implicit val serializer = new TreeSerializable[IntArrowType] {
     def show[A](t: IntArrowType[A]): Tree =
       t[ShowTree].apply(0)
   }

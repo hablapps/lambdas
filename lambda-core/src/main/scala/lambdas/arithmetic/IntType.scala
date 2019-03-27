@@ -35,7 +35,7 @@ object IntType {
     def tint: String = "TInt"
   }
 
-  import trees._, Treeable.ShowTree
+  import trees._, TreeSerializable.ShowTree
 
   trait Constructors {
     def tr_tInt: Tree =

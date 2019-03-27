@@ -2,7 +2,7 @@ package lambdas
 package arithmetic
 package semantics
 
-import trees._, Treeable.ShowTree
+import trees._, TreeSerializable.ShowTree
 
 object Serializer extends Arithmetic[ShowTree] {
 
