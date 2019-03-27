@@ -3,7 +3,13 @@ package tfhoas
 
 import arithmetic.Arithmetic
 
-case class Examples[P[_]]()(implicit L: Lambda[P], A: Arithmetic[P]) {
+case class Examples[Type[_]: ArrowType, P[_]]()(
+    implicit
+    L: Lambda[Type, P],
+    A: Arithmetic[P],
+    TI: Type[Int],
+    TII: Type[Int => Int]
+) {
 
   import L._
   import A._

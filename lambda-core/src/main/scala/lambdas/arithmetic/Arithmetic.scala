@@ -16,10 +16,11 @@ object Arithmetic extends LPI {
 
   def apply[P[_]](implicit A: Arithmetic[P]) = A
 
-  implicit val ArithmeticId        = semantics.ArithmeticId
-  implicit val ArithmeticShow      = semantics.ShowArithFun
-  implicit val ArithmeticShowB     = semantics.ShowBArith
-  implicit val ArithmeticFunction1 = semantics.Function1Arith
+  implicit val ArithmeticId         = semantics.ArithmeticId
+  implicit val ArithmeticShow       = semantics.ShowArithFun
+  implicit val ArithmeticShowB      = semantics.ShowBArith
+  implicit val ArithmeticSerializer = semantics.Serializer
+  implicit val ArithmeticFunction1  = semantics.Function1Arith
   implicit def TupledSem[P1[_, _]: Forall[?[_, _], Arithmetic], P2[_, _]: Forall[
     ?[_, _],
     Arithmetic

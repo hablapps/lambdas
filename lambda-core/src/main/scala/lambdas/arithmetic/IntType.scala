@@ -15,7 +15,7 @@ object IntType {
   case class Case[A](is: A Is Int)
 
   object Case {
-    implicit val Case_IntType = new IntType[λ[T => Option[Case[T]]]] {
+    implicit val _IntType = new IntType[λ[T => Option[Case[T]]]] {
       def tint: Option[Case[Int]] =
         Option(Case(Is.refl[Int]))
     }
@@ -33,5 +33,19 @@ object IntType {
 
   implicit val _ShowP = new IntType[ShowP] {
     def tint: String = "TInt"
+  }
+
+  import trees._, TreeSerializable.ShowTree
+
+  trait Constructors {
+    def tr_tInt: Tree =
+      Leaf("TInt")
+  }
+
+  object Constructors extends Constructors
+
+  implicit def _ShowTree = new IntType[ShowTree] {
+    def tint: Int => Tree =
+      _ => Constructors.tr_tInt
   }
 }

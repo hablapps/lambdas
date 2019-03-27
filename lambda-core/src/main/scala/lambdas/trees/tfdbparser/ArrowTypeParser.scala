@@ -2,7 +2,6 @@ package lambdas
 package trees
 package tfdbparser
 
-import tfdb._
 import safecast._
 import interpreters._
 

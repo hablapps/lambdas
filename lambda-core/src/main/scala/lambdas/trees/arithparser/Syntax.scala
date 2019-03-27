@@ -2,21 +2,8 @@ package lambdas
 package trees
 package arithparser
 
-trait Syntax extends Constructors with Destructors
+trait Syntax {
 
-trait Constructors {
-
-  def tr_int(i: Int): Tree =
-    Node("Int", List(Leaf(i.toString)))
-
-  def tr_add(i: Tree, j: Tree): Tree =
-    Node("Add", List(i, j))
-
-  val tr_tInt: Tree =
-    Leaf("TInt")
-}
-
-trait Destructors {
   import scala.util.Try
 
   object IntT {
