@@ -12,4 +12,5 @@ object IntArrowParser {
   def apply[P[_, _]: Lambda: Forall[?[_, _], Arithmetic]] =
     ArrowParser(IntArrowType.parser) orElse
     IntParser.forall[P, IntArrowType] close
+
 }

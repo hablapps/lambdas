@@ -1,8 +1,6 @@
 package lambdas
 package tfhoast
 
-import tfdb.ArrowType
-
 abstract class Lambda[Type[_]: ArrowType, P[_]] {
 
   def lam[A: Type, B: Type](f: P[A] => P[B]): P[A => B]

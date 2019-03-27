@@ -1,7 +1,6 @@
 package lambdas
 package tfdbarith
 
-import tfdb.ArrowType
 import arithmetic.IntType
 
 trait IntArrowType[A] {
@@ -17,6 +16,8 @@ object IntArrowType {
     }
   }
 
+  implicit val _Int = _IntType.tint
+
   implicit val _ArrowType = new ArrowType[IntArrowType] {
     def tarrow[T1, T2](
         t1: IntArrowType[T1],
@@ -26,6 +27,9 @@ object IntArrowType {
         R.tarrow(t1(I, R), t2(I, R))
     }
   }
+
+  implicit def _Arrow[T1, T2](implicit T1: IntArrowType[T1], T2: IntArrowType[T2]) =
+    _ArrowType.tarrow(T1, T2)
 
   implicit val IntTypeMatch = new IntType.Match[IntArrowType] {
 
@@ -93,4 +97,11 @@ object IntArrowType {
   val parser: Interpreter[Tree, Either[String, ATypeTerm[IntArrowType]]] =
     ArrowTypeParser[IntArrowType] orElse
     IntTypeParser[IntArrowType] close
+
+  import trees._, Treeable.ShowTree
+
+  implicit val serializer = new Treeable[IntArrowType] {
+    def show[A](t: IntArrowType[A]): Tree =
+      t[ShowTree].apply(0)
+  }
 }

@@ -1,5 +1,4 @@
 package lambdas
-package tfdb
 
 import cats.evidence._
 import safecast._
@@ -59,5 +58,17 @@ object ArrowType {
   implicit val _ShowP = new ArrowType[ShowP] {
     def tarrow[T1, T2](t1: String, t2: String): String =
       s"$t1 -> $t2"
+  }
+
+  import trees._, Treeable.ShowTree
+
+  object Constructors {
+    def tr_tArr(t1: Tree, t2: Tree): Tree =
+      Node("TArr", List(t1, t2))
+  }
+
+  implicit def _ShowTree = new ArrowType[ShowTree] {
+    def tarrow[T1, T2](t1: ShowTree[T1], t2: ShowTree[T2]): ShowTree[T1 => T2] =
+      (i: Int) => Constructors.tr_tArr(t1(i), t2(i))
   }
 }

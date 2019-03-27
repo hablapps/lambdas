@@ -7,4 +7,6 @@ trait Treeable[T[_]] {
 
 object Treeable {
   def apply[T[_]](implicit T: Treeable[T]) = T
+
+  type ShowTree[A] = Int => Tree
 }

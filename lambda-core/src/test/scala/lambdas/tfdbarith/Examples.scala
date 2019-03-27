@@ -4,7 +4,7 @@ package tfdbarith
 import tfdb.Lambda
 import arithmetic.Arithmetic
 
-case class Examples[P[_, _]]()(implicit L: Lambda[P], A: Forall[P, Arithmetic]) {
+case class ExamplesDB[P[_, _]]()(implicit L: Lambda[P], A: Forall[P, Arithmetic]) {
   import L._
 
   def ex: P[Unit, (Int => Int) => Int] =
