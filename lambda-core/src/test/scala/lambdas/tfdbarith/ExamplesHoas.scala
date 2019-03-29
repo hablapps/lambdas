@@ -29,7 +29,7 @@ case class ExamplesHoas[Type[_]: ArrowType, P[_]]()(
 
   val `λx0.λx1.x0`: P[Int => Int => Int] =
     lam { x0: P[Int] =>
-      lam { x1: P[Int] =>
+      lam { _: P[Int] =>
         x0
       }
     }

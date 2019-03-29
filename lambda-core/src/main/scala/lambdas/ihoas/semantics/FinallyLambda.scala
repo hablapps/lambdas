@@ -4,12 +4,8 @@ package hoas
 package semantics
 
 import tfhoas.{ Lambda => FLambda }
-import arithmetic.Arithmetic
 
-case class FinallyLambda[Type[_]: ArrowType, P[_]]()(
-    implicit F: FLambda[Type, P],
-    A: Arithmetic[P]
-) {
+case class FinallyLambda[Type[_]: ArrowType, P[_]]()(implicit F: FLambda[Type, P]) {
 
   def apply[T](l: Lambda[Type, P, T]): P[T] = l match {
     case Var(v, _)         => v
