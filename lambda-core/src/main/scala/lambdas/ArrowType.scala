@@ -2,6 +2,7 @@ package lambdas
 
 import cats.evidence._
 import safecast._
+import shapeless.Lazy
 
 trait ArrowType[T[_]] {
   def tarrow[T1, T2](t1: T[T1], t2: T[T2]): T[T1 => T2]
@@ -10,6 +11,13 @@ trait ArrowType[T[_]] {
 object ArrowType {
 
   def apply[T[_]](implicit A: ArrowType[T]) = A
+
+  implicit def _Function1[T[_], A, B](
+      implicit AT: ArrowType[T],
+      TA: Lazy[T[A]],
+      TB: Lazy[T[B]]
+  ): T[A => B] =
+    AT.tarrow(TA.value, TB.value)
 
   abstract class Case[T[_], A] {
     type T1
