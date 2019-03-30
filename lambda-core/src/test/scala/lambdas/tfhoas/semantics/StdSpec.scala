@@ -16,10 +16,6 @@ class StdSpec extends FunSpec with Matchers {
 
       ex1 shouldBe 4
 
-      // ex2[Unit]((3, ()))(4) shouldBe 7
-
-      // ex4((3, (4, ()))) shouldBe 7
-
       ex3(_ + 1) shouldBe 4
     }
   }

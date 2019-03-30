@@ -1,7 +1,7 @@
 package lambdas
 package tfhoas
 
-import ArrowType._Function1
+import ArrowType.Implicits._
 
 package object syntax {
 
@@ -47,7 +47,7 @@ package object syntax {
   ) {
     def tupled: P[((A, B)) => C]      = L.tupled(c)
     def curried: P[A => B => C]       = L.curried(c)
-    def apply(a: P[A], b: P[B]): P[C] = b |> { a.|>(c.curried)(AT.tarrow(TB, TC)) }
+    def apply(a: P[A], b: P[B]): P[C] = b |> { a |> c.curried }
   }
 
   implicit class Function2CurriedOps[Type[_]: ArrowType, P[_], A: Type, B: Type, C: Type](

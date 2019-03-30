@@ -2,22 +2,45 @@ package lambdas
 
 import cats.evidence._
 import safecast._
-import shapeless.Lazy
 
 trait ArrowType[T[_]] {
   def tarrow[T1, T2](t1: T[T1], t2: T[T2]): T[T1 => T2]
 }
 
-object ArrowType {
+object ArrowType
+    extends ArrowTypeImplicits
+    with ArrowTypeDeserialization
+    with ArrowTypeSerialization
+    with ArrowTypeLPI {
 
   def apply[T[_]](implicit A: ArrowType[T]) = A
+}
 
-  implicit def _Function1[T[_], A, B](
-      implicit AT: ArrowType[T],
-      TA: Lazy[T[A]],
-      TB: Lazy[T[B]]
-  ): T[A => B] =
-    AT.tarrow(TA.value, TB.value)
+trait ArrowTypeImplicits {
+
+  trait Implicits[T[_]] {
+    val _ArrowType: ArrowType[T]
+
+    implicit def _Function1[A, B](
+        implicit
+        TA: T[A],
+        TB: T[B]
+    ): T[A => B] =
+      Implicits._Function1(TA, TB, _ArrowType)
+  }
+
+  object Implicits {
+    implicit def _Function1[T[_], A, B](
+        implicit
+        TA: T[A],
+        TB: T[B],
+        AT: ArrowType[T]
+    ): T[A => B] =
+      AT.tarrow(TA, TB)
+  }
+}
+
+trait ArrowTypeDeserialization {
 
   abstract class Case[T[_], A] {
     type T1
@@ -62,11 +85,9 @@ object ArrowType {
           } yield (eqT0, eqT1).lift2[Function1].andThen(result.is.flip)
       }
     }
+}
 
-  implicit val _ShowP = new ArrowType[ShowP] {
-    def tarrow[T1, T2](t1: String, t2: String): String =
-      s"$t1 -> $t2"
-  }
+trait ArrowTypeSerialization {
 
   import trees._, TreeSerializable.ShowTree
 
@@ -80,5 +101,13 @@ object ArrowType {
   implicit def _ShowTree = new ArrowType[ShowTree] {
     def tarrow[T1, T2](t1: ShowTree[T1], t2: ShowTree[T2]): ShowTree[T1 => T2] =
       (i: Int) => Constructors.tr_tArr(t1(i), t2(i))
+  }
+}
+
+trait ArrowTypeLPI {
+
+  implicit val _ShowP = new ArrowType[ShowP] {
+    def tarrow[T1, T2](t1: String, t2: String): String =
+      s"$t1 -> $t2"
   }
 }

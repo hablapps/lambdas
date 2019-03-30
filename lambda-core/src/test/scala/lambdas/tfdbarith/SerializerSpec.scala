@@ -2,6 +2,7 @@ package lambdas
 package tfdbarith
 
 import trees._, TreeSerializable.ShowTree
+import TreeSerializer._
 
 import org.scalatest._
 
@@ -9,11 +10,6 @@ class SerializerSpec extends FunSpec with Matchers with Inside {
 
   val E = ExamplesHoas[IntArrowType, ShowTree]
   import E._
-
-  import arithmetic.semantics.Serializer.Constructors._
-  import arithmetic.IntType.Constructors._
-  import ArrowType.Constructors._
-  import tfhoas.semantics.Serializer.Constructors._
 
   describe("Serializing") {
     it("Lambda expressions") {

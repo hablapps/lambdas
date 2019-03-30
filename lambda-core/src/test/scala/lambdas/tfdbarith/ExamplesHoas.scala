@@ -2,14 +2,12 @@ package lambdas
 package tfdbarith
 
 import tfhoas.Lambda
-import arithmetic.Arithmetic
+import arithmetic.{ Arithmetic, IntType }, IntType.Implicits._, ArrowType.Implicits._
 
-case class ExamplesHoas[Type[_]: ArrowType, P[_]]()(
+case class ExamplesHoas[Type[_]: ArrowType: IntType, P[_]]()(
     implicit
     L: Lambda[Type, P],
-    A: Arithmetic[P],
-    IT: Type[Int],
-    AT: Type[Int => Int]
+    A: Arithmetic[P]
 ) {
 
   import L._, A._

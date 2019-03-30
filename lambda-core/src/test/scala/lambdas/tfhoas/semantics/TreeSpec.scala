@@ -9,15 +9,8 @@ import tfdbarith.IntArrowType
 
 class TreeSpec extends FunSpec with Matchers {
 
-  implicit def _IntArrowType = new TreeSerializable[IntArrowType] {
-    def show[A](t: IntArrowType[A]) =
-      Leaf("TInt")
-  }
-
   val L = Lambda[IntArrowType, ShowTree]
   import L._
-
-  implicit val _IntType = arithmetic.IntType[IntArrowType].tint
 
   describe("Serialize lambda expressions") {
 
