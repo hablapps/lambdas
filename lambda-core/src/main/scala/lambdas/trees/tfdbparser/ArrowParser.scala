@@ -68,8 +68,11 @@ object ArrowParser {
       }
   }
 
+  type OpenInterpreterEither[T[_], F[_]] =
+    OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]
+
   case class Lifted[P[_, _], T[_]](
-      Parser: Forall[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
+      Parser: Forall[P, OpenInterpreterEither[T, ?[_]]]
   ) extends OpenInterpreter[Tree, Result[T, P]] {
     def apply(rec: => Interpreter[Tree, Result[T, P]]) =
       (tree: Tree) =>
@@ -82,7 +85,7 @@ object ArrowParser {
   import scala.language.implicitConversions
 
   implicit def lift[P[_, _], T[_]](
-      parser: Forall[P, λ[F[_] => OpenInterpreter[Tree, Either[String, DynTerm[T, F]]]]]
+      parser: Forall[P, OpenInterpreterEither[T, ?[_]]]
   ) =
     Lifted(parser)
 
