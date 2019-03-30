@@ -44,7 +44,7 @@ class Serializer[Type[_]: ArrowType: TreeSerializable]
   ): ShowTree[(A, B) => C] =
     (i: Int) => {
       val x = "x" + i
-      val y = "x" + i + 1
+      val y = "x" + (i + 1)
       tr_lam2(
         x,
         TreeSerializable[Type].show(Type[A]),
