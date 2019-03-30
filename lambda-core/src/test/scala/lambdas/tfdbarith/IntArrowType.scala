@@ -32,6 +32,15 @@ trait IntArrowTypeInstances {
       def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[T1 => T2] =
         R.tarrow(t1(I, R), t2(I, R))
     }
+
+    def tarrow2[T1, T2, T3](
+        t1: IntArrowType[T1],
+        t2: IntArrowType[T2],
+        t3: IntArrowType[T3]
+    ): IntArrowType[(T1, T2) => T3] = new IntArrowType[(T1, T2) => T3] {
+      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[(T1, T2) => T3] =
+        R.tarrow2(t1(I, R), t2(I, R), t3(I, R))
+    }
   }
 }
 
@@ -44,6 +53,13 @@ trait IntArrowTypeDeserialization {
           t1: Option[IntType.Case[T1]],
           t2: Option[IntType.Case[T2]]
       ): Option[IntType.Case[T1 => T2]] =
+        None
+
+      def tarrow2[T1, T2, T3](
+          t1: Option[IntType.Case[T1]],
+          t2: Option[IntType.Case[T2]],
+          t3: Option[IntType.Case[T3]]
+      ): Option[IntType.Case[(T1, T2) => T3]] =
         None
     }
 
