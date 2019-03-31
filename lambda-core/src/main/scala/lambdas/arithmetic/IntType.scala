@@ -37,9 +37,24 @@ trait IntTypeDeserialization {
   case class Case[A](is: A Is Int)
 
   object Case {
-    implicit val _IntTypeCase = new IntType[λ[T => Option[Case[T]]]] {
+    implicit val _IntTypeCase = new IntType[λ[A => Option[Case[A]]]] {
       def tint: Option[Case[Int]] =
         Option(Case(Is.refl[Int]))
+    }
+
+    implicit val TIsInt_ArrowType = new ArrowType[λ[A => Option[Case[A]]]] {
+      def tarrow[T1, T2](
+          t1: Option[Case[T1]],
+          t2: Option[Case[T2]]
+      ): Option[Case[T1 => T2]] =
+        None
+
+      def tarrow2[T1, T2, T3](
+          t1: Option[Case[T1]],
+          t2: Option[Case[T2]],
+          t3: Option[Case[T3]]
+      ): Option[Case[(T1, T2) => T3]] =
+        None
     }
   }
 

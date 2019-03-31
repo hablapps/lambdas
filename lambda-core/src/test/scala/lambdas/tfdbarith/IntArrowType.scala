@@ -45,69 +45,27 @@ trait IntArrowTypeInstances {
 }
 
 trait IntArrowTypeDeserialization {
+  import scala.language.postfixOps
+  import cats.evidence.Is
+  import cats.instances.string._
+  import safecast._
+  import interpreters._
+  import trees._, arithparser._, tfdbparser._
 
-  implicit val IntTypeMatch = new IntType.Match[IntArrowType] {
-
-    implicit val TIsInt_ArrowType = new ArrowType[λ[A => Option[IntType.Case[A]]]] {
-      def tarrow[T1, T2](
-          t1: Option[IntType.Case[T1]],
-          t2: Option[IntType.Case[T2]]
-      ): Option[IntType.Case[T1 => T2]] =
-        None
-
-      def tarrow2[T1, T2, T3](
-          t1: Option[IntType.Case[T1]],
-          t2: Option[IntType.Case[T2]],
-          t3: Option[IntType.Case[T3]]
-      ): Option[IntType.Case[(T1, T2) => T3]] =
-        None
-    }
-
+  implicit val _IntTypeMatch = new IntType.Match[IntArrowType] {
     def unapply[A](t: IntArrowType[A]): Option[IntType.Case[A]] =
       t[λ[T => Option[IntType.Case[T]]]]
   }
 
-  implicit val ArrowTypeMatch = new ArrowType.Match[IntArrowType] {
-
-    implicit val TIsArrow_IntType =
-      new IntType[λ[T => (IntArrowType[T], Option[ArrowType.Case[IntArrowType, T]])]] {
-        def tint = (IntType[IntArrowType].tint, None)
-      }
-
+  implicit val _ArrowTypeMatch = new ArrowType.Match[IntArrowType] {
     def unapply[A](t: IntArrowType[A]): Option[ArrowType.Case[IntArrowType, A]] =
       t[λ[T => (IntArrowType[T], Option[ArrowType.Case[IntArrowType, T]])]]._2
   }
-
-  import safecast._
-  import cats.evidence.Is
 
   implicit val _Cast = new Cast[IntArrowType] {
     def apply[T1, T2](t1: IntArrowType[T1], t2: IntArrowType[T2]): Option[T1 Is T2] =
       t1[Cast.As[IntArrowType, ?]].apply(t2)
   }
-
-  val _NotPatentlyTotalCast = new Cast[IntArrowType] {
-    def apply[T1, T2](t1: IntArrowType[T1], t2: IntArrowType[T2]): Option[T1 Is T2] =
-      (t1, t2) match {
-
-        case (IntTypeMatch(c1), IntTypeMatch(c2)) =>
-          Option(c1.is andThen c2.is.flip)
-
-        case (ArrowTypeMatch(c1), ArrowTypeMatch(c2)) =>
-          for {
-            t11Ist12 <- apply(c1.t1, c2.t1)
-            t21Ist22 <- apply(c1.t2, c2.t2)
-          } yield c1.is andThen (t11Ist12, t21Ist22).lift2[Function1] andThen c2.is.flip
-
-        case (_, _) =>
-          None
-      }
-  }
-
-  import scala.language.postfixOps
-  import cats.instances.string._
-  import interpreters._
-  import trees._, arithparser._, tfdbparser._
 
   val parser: Interpreter[Tree, Either[String, ATypeTerm[IntArrowType]]] =
     ArrowTypeParser[IntArrowType] orElse
@@ -125,6 +83,7 @@ trait IntArrowTypeSerialization {
 }
 
 trait IntArrowTypeLPI {
+
   implicit val _ForallShow = new Forall0[IntArrowType, cats.Show] {
     def apply[A]() = new cats.Show[IntArrowType[A]] {
       def show(t: IntArrowType[A]): String =

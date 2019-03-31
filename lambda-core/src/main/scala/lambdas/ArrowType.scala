@@ -78,6 +78,13 @@ trait ArrowTypeDeserialization {
         ) =
           (ArrowType[T].tarrow2(ot1._1, ot2._1, ot3._1), None)
       }
+
+    import arithmetic.IntType
+
+    implicit def TIsArrow_IntType[T[_]: IntType] =
+      new IntType[λ[A => (T[A], Option[Case[T, A]])]] {
+        def tint = (IntType[T].tint, None)
+      }
   }
 
   type Match[T[_]] = safecast.Match[T, Case[T, ?]]
@@ -141,6 +148,13 @@ trait ArrowTypeDeserialization2 {
             val t3 = ot3._1
             val is = Is.refl[(T1, T2) => T3]
           }))
+      }
+
+    import arithmetic.IntType
+
+    implicit def TIsArrow_IntType[T[_]: IntType] =
+      new IntType[λ[A => (T[A], Option[Case2[T, A]])]] {
+        def tint = (IntType[T].tint, None)
       }
   }
 
