@@ -12,7 +12,7 @@ class TupledParserSpec extends FunSpec with Matchers with Inside {
     it("without variables") {
       inside(
         IntArrowParser[Tupled2[Function1, ShowB]#λ](
-          tfdb.Lambda.TupledSem[Function1, ShowB],
+          tfdb.Lambda.TupledSem[IntArrowType, Function1, ShowB],
           arithmetic.Arithmetic.TupledSem[Function1, ShowB]
         ).apply(tr_app(tr_lam("v0", tr_tInt, tr_vr("v0")), tr_int(1)))(())
       ) {

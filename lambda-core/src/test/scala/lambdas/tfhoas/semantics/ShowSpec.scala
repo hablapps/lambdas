@@ -8,8 +8,6 @@ import arithmetic._
 
 class ShowSpec extends FunSpec with Matchers {
 
-  import tfdbarith.IntArrowType
-
   val A = Arithmetic[Show]
   import A._
   val L = Lambda[IntArrowType, Show]
@@ -25,7 +23,7 @@ class ShowSpec extends FunSpec with Matchers {
 
       ex3(0) shouldBe "(λx0.((x0 1)+2))"
 
-      lam[Int, Int](x0 => add(x0)(int(1))).apply(0) shouldBe
+      lam[Num, Num](x0 => add(x0)(int(1.bd))).apply(0) shouldBe
       "(λx0.(x0+1))"
     }
   }

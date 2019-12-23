@@ -1,12 +1,12 @@
 package lambdas
 
-trait ProductType[T[_]] {
+trait ProductType[T[_]] extends Serializable {
   def tProduct[T1, T2](t1: T[T1], t2: T[T2]): T[(T1, T2)]
 }
 
 object ProductType
     extends ProductTypeImplicits
-    // with ProductTypeDeserialization
+    with ProductTypeDeserialization
     with ProductTypeSerialization
     with ProductTypeLPI {
 
@@ -37,7 +37,7 @@ trait ProductTypeImplicits {
   }
 }
 
-trait ProductTypeDeserialization {
+trait ProductTypeDeserialization extends ProductTypeDeserializationLPI {
   import cats.evidence._
   import safecast._
 
@@ -53,23 +53,21 @@ trait ProductTypeDeserialization {
       is.substitute[F](t)
   }
 
-  object Case {
-    implicit def Case_ProductType[T[_]: ProductType] =
-      new ProductType[λ[A => (T[A], Option[Case[T, A]])]] {
-        def tProduct[_T1, _T2](
-            ot1: (T[_T1], Option[Case[T, _T1]]),
-            ot2: (T[_T2], Option[Case[T, _T2]])
-        ) =
-          (ProductType[T].tProduct(ot1._1, ot2._1), Option(new Case[T, (_T1, _T2)] {
-            type T1 = _T1
-            type T2 = _T2
+  implicit def Case_ProductType[T[_]: ProductType] =
+    new ProductType[λ[A => (T[A], Option[Case[T, A]])]] {
+      def tProduct[_T1, _T2](
+          ot1: (T[_T1], Option[Case[T, _T1]]),
+          ot2: (T[_T2], Option[Case[T, _T2]])
+      ) =
+        (ProductType[T].tProduct(ot1._1, ot2._1), Option(new Case[T, (_T1, _T2)] {
+          type T1 = _T1
+          type T2 = _T2
 
-            val t1 = ot1._1
-            val t2 = ot2._1
-            val is = Is.refl[(T1, T2)]
-          }))
-      }
-  }
+          val t1 = ot1._1
+          val t2 = ot2._1
+          val is = Is.refl[(T1, T2)]
+        }))
+    }
 
   type Match[T[_]] = safecast.Match[T, Case[T, ?]]
 
@@ -83,6 +81,26 @@ trait ProductTypeDeserialization {
             eqT1   <- t1(result.t2)
           } yield (eqT0, eqT1).lift2[Tuple2].andThen(result.is.flip)
       }
+    }
+}
+
+trait ProductTypeDeserializationLPI {
+
+  implicit def Case_ProductTypeGen2[T[_]: ProductType, Ca[T[_], A]] =
+    new ProductType[λ[A => (T[A], Option[Ca[T, A]])]] {
+      def tProduct[_T1, _T2](
+          ot1: (T[_T1], Option[Ca[T, _T1]]),
+          ot2: (T[_T2], Option[Ca[T, _T2]])
+      ) =
+        (ProductType[T].tProduct(ot1._1, ot2._1), None)
+    }
+
+  implicit def Case_ProductTypeGen1[Ca[_]] =
+    new ProductType[λ[A => Option[Ca[A]]]] {
+      def tProduct[_T1, _T2](
+          ot1: Option[Ca[_T1]],
+          ot2: Option[Ca[_T2]]
+      ) = None
     }
 }
 
@@ -109,4 +127,10 @@ trait ProductTypeLPI {
     def tProduct[T1, T2](t1: String, t2: String): String =
       s"($t1, $t2)"
   }
+}
+
+trait ProductTypeSyntax {
+
+  def tProduct[T[_], T1, T2](t1: T[T1], t2: T[T2])(implicit T: ProductType[T]): T[(T1, T2)] =
+    T.tProduct(t1, t2)
 }

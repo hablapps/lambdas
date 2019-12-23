@@ -8,9 +8,14 @@ abstract class DynTerm[T[_], F[_]] {
 
   def as[B](tb: T[B])(implicit C: Cast[T]): Option[F[B]] =
     C.as[A, B, F](typ, tb)(term)
+
+  def as1[B](implicit tb: T[B], C: Cast[T]): Option[F[B]] =
+    C.as[A, B, F](typ, tb)(term)
 }
 
 object DynTerm {
+
+  type Aux[T[_], F[_], _A] = DynTerm[T, F] { type A = _A }
 
   def unapply[T[_], F[_]](dt: DynTerm[T, F]): Option[(T[_], F[_])] =
     Some((dt.typ, dt.term))

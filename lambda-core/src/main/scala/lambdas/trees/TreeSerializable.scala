@@ -8,5 +8,6 @@ trait TreeSerializable[T[_]] {
 object TreeSerializable {
   def apply[T[_]](implicit T: TreeSerializable[T]) = T
 
-  type ShowTree[A] = Int => Tree
+  type ShowTree[A]     = Int => Tree
+  type ShowTreeB[E, A] = Int => Tree
 }

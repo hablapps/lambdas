@@ -2,5 +2,5 @@ package lambdas
 
 package object tfdb {
 
-  type Term[E, T] = semantics.Term[E, T]
+  type Term[Type[_], E, T] = semantics.Term[Type, E, T]
 }

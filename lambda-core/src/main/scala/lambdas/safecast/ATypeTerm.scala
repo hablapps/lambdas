@@ -1,6 +1,7 @@
 package lambdas
 package safecast
 
+// FIX: remove, replace with Dynamic
 abstract class ATypeTerm[T[_]] {
   type A
   val typ: T[A]

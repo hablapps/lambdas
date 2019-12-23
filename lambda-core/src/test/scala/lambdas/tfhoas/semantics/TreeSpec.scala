@@ -3,9 +3,9 @@ package tfhoas
 package semantics
 
 import org.scalatest._
-
-import trees._, TreeSerializable.ShowTree
-import tfdbarith.IntArrowType
+import trees._
+import TreeSerializable.ShowTree
+import lambdas.arithmetic.Num
 
 class TreeSpec extends FunSpec with Matchers {
 
@@ -16,10 +16,17 @@ class TreeSpec extends FunSpec with Matchers {
 
     it("works") {
 
-      lam[Int, Int] { v =>
-        v
+      lam[Num, Num] { x0: ShowTree[Num] =>
+        x0
       }.apply(0) shouldBe
-      Node("Lam", List(Leaf("x0"), Leaf("TInt"), Node("Var", List(Leaf("x0")))))
+      Node(
+        "Lam",
+        List(
+          Leaf("x0"),
+          Leaf("TInt"), // x0: Int
+          Node("Var", List(Leaf("x0")))
+        )
+      ) // x0
     }
   }
 }

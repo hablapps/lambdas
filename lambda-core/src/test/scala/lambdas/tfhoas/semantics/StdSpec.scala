@@ -3,10 +3,10 @@ package tfhoas
 package semantics
 
 import org.scalatest._
+import arithmetic._
 
 class StdSpec extends FunSpec with Matchers {
 
-  import tfdbarith.IntArrowType
   val L = Examples[IntArrowType, cats.Id]()
   import L._
 
@@ -14,9 +14,9 @@ class StdSpec extends FunSpec with Matchers {
 
     it("works") {
 
-      ex1 shouldBe 4
+      ex1 shouldBe 4.bd
 
-      ex3(_ + 1) shouldBe 4
+      ex3(_ + 1.bd) shouldBe 4.bd
     }
   }
 }

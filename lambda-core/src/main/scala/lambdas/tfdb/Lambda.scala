@@ -1,18 +1,29 @@
 package lambdas
 package tfdb
 
-trait Lambda[P[E, T]] {
-  def vz[E, T]: P[(T, E), T]
-  def vs[E, T, T1](a: P[E, T]): P[(T1, E), T]
-  def lam[E, T1, T2](t: P[(T1, E), T2]): P[E, T1 => T2]
-  def app[E, T1, T2](f: P[E, T1 => T2])(t1: P[E, T1]): P[E, T2]
+import ArrowType.Implicits._
+
+abstract class Lambda[Type[_]: ArrowType, P[E, T]] extends Serializable {
+  def vz[E, T: Type]: P[(T, E), T]
+  def vs[E, T: Type, T1: Type](a: P[E, T]): P[(T1, E), T]
+  def lam[E, T1: Type, T2: Type](t: P[(T1, E), T2]): P[E, T1 => T2]
+  def app[E, T1: Type, T2: Type](f: P[E, T1 => T2])(t1: P[E, T1]): P[E, T2]
+
+  def lam2[E, T1: Type, T2: Type, T3: Type](t: P[(T2, (T1, E)), T3]): P[E, T1 => T2 => T3] =
+    lam(lam(t))
 }
 
 object Lambda {
-  def apply[P[E, T]](implicit L: Lambda[P]) = L
+  def apply[Type[_]: ArrowType, P[E, T]](implicit L: Lambda[Type, P]) = L
 
-  implicit val ShowSem: Lambda[ShowB]                        = semantics.ShowSem
-  implicit val StdSem: Lambda[Function1]                     = semantics.Standard
-  implicit val TermSem: Lambda[semantics.Term]               = semantics.Term.TermLambda
-  implicit def TupledSem[P1[_, _]: Lambda, P2[_, _]: Lambda] = new semantics.TupledInstance[P1, P2]
+  implicit def ShowSem[Type[_]: ArrowType]: Lambda[Type, ShowB] = new semantics.ShowSem[Type]
+  implicit def ShowTreeBSem[Type[_]: ArrowType: trees.TreeSerializable] =
+    new semantics.LambdaSerializer[Type]
+  implicit def StdSem[Type[_]: ArrowType]: Lambda[Type, Function1] = new semantics.Standard[Type]
+  implicit def TermSem[Type[_]: ArrowType]: Lambda[Type, semantics.Term[Type, ?, ?]] =
+    new semantics.Term.TermLambda[Type]
+  implicit def TupledSem[Type[_]: ArrowType, P1[_, _]: Lambda[Type, ?[_, _]], P2[_, _]: Lambda[
+    Type,
+    ?[_, _]
+  ]] = new semantics.TupledInstance[Type, P1, P2]
 }

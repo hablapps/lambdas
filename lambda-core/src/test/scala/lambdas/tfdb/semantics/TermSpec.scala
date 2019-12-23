@@ -2,15 +2,16 @@ package lambdas
 package tfdb
 package semantics
 
+import lambdas.arithmetic._
 import org.scalatest._
 
 class TermSpec extends FunSpec with Matchers {
 
-  val E = Examples[Term]
+  val E = Examples[IntArrowType, Term[IntArrowType, ?, ?]]
   import E._
 
   it("with free variables") {
-    ex1[Function1]: (((Int => Int, (Int, Unit))) => Int)
-    ex1[Function1].apply((identity, (4, ()))) shouldBe 4
+    ex1[Function1]: (((Num => Num, (Num, Unit))) => Num)
+    ex1[Function1].apply((identity, (4.bd, ()))) shouldBe 4.bd
   }
 }

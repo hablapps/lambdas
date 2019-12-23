@@ -1,7 +1,9 @@
 package lambdas
 package tfhoas
 
-import arithmetic.{ Arithmetic, IntType }, ArrowType.Implicits._, IntType.Implicits._
+import arithmetic._
+import ArrowType.Implicits._
+import IntType.Implicits._
 
 case class Examples[Type[_]: ArrowType: IntType, P[_]]()(
     implicit
@@ -12,11 +14,11 @@ case class Examples[Type[_]: ArrowType: IntType, P[_]]()(
   import L._
   import A._
 
-  def ex1: P[Int] =
-    add(int(1))(int(3))
+  def ex1: P[Num] =
+    A.add(int(1.bd))(int(3.bd))
 
-  def ex3: P[(Int => Int) => Int] =
+  def ex3: P[(Num => Num) => Num] =
     lam { f =>
-      add(app(f)(int(1)))(int(2))
+      A.add(app(f)(int(1.bd)))(int(2.bd))
     }
 }

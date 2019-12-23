@@ -10,17 +10,6 @@ class Standard[Type[_]: ArrowType] extends tfhoas.Lambda[Type, cats.Id] {
   def app[A: Type, B: Type](f: A => B)(t1: A): B =
     f(t1)
 
-  // Products
-
-  def tuple[A: Type, B: Type](a: A, b: B): (A, B) =
-    (a, b)
-
-  def fst[A: Type, B: Type](t: (A, B)): A =
-    t._1
-
-  def snd[A: Type, B: Type](t: (A, B)): B =
-    t._2
-
   // Auxiliary
 
   def lam2[A: Type, B: Type, C: Type](f: (A, B) => C): (A, B) => C =

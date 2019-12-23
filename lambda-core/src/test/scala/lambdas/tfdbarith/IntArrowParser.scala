@@ -9,7 +9,8 @@ import arithmetic.Arithmetic
 
 object IntArrowParser {
 
-  def apply[P[_, _]: Lambda: Forall[?[_, _], Arithmetic]] =
+  def apply[P[_, _]: Lambda[IntArrowType, ?[_, _]]: Forall[?[_, _], Arithmetic]]
+    : lambdas.interpreters.Interpreter[Tree, Result[IntArrowType, P]] =
     ArrowParser(IntArrowType.parser) orElse
     IntParser.forall[P, IntArrowType] close
 
