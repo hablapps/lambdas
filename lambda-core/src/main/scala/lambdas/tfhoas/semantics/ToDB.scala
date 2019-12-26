@@ -3,17 +3,18 @@ package tfhoas
 package semantics
 
 import safecast._
-import tfdb.semantics.ChurchDB
 import TDB.Ctx
 
-abstract class TDB[Type[_]: ArrowType, A] {
-  def apply[E](ctx: Ctx[Type, E]): ChurchDB[Type, E, A]
+abstract class TDB[Type[_]: ArrowType, P[_, _]: tfdb.Lambda[Type, ?[_, _]], A] {
+  def apply[E](ctx: Ctx[Type, E]): P[E, A]
 }
 
 object TDB {
 
-  implicit class TDBOps[Type[_]: ArrowType, A](tdb: TDB[Type, A]) {
-    def church: ChurchDB[Type, Unit, A] =
+  implicit class TDBOps[Type[_]: ArrowType, A, P[_, _]: tfdb.Lambda[Type, ?[_, _]]](
+      tdb: TDB[Type, P, A]
+  ) {
+    def closed: P[Unit, A] =
       tdb(CtxZ())
   }
 
@@ -44,7 +45,7 @@ object TDB {
       if (n == 0)
         Cast
           .as[A1, A, λ[T => P[(A1, E1), T]]](tA1, tA)(L.vz(tA1))
-          .get // .asInstanceOf[P[(A1, E1), A]]
+          .get
       else L.vs(ctx1.tshift1(n - 1, c2))(tA, tA1)
     }
   }
@@ -61,34 +62,26 @@ object TDB {
       ctxj.tshift1(ctxj.len - ctxi.len, ctxi)
   }
 
-  class TDB_Hoas[Type[_]: ArrowType: Cast] extends Lambda[Type, TDB[Type, ?]] {
+  class TDB_Hoas[Type[_]: ArrowType: Cast, P[_, _]](implicit L: tfdb.Lambda[Type, P])
+      extends Lambda[Type, TDB[Type, P, ?]] {
 
     def lam[A, B](
-        f: TDB[Type, A] => TDB[Type, B]
-    )(implicit tA: Type[A], tB: Type[B]): TDB[Type, A => B] =
-      new TDB[Type, A => B] {
-        def apply[E](ctxi: Ctx[Type, E]): ChurchDB[Type, E, A => B] =
-          new ChurchDB[Type, E, A => B] {
-            def apply[P[_, _]](implicit L: tfdb.Lambda[Type, P]) = {
-              val tdba: TDB[Type, A] = new TDB[Type, A] {
-                def apply[E1](ctxj: Ctx[Type, E1]): ChurchDB[Type, E1, A] =
-                  new ChurchDB[Type, E1, A] {
-                    def apply[P1[_, _]](implicit L1: tfdb.Lambda[Type, P1]) =
-                      Ctx.tshift[Type, A, E, E1, P1](ctxj, CtxS[Type, E, A](ctxi, tA))
-                  }
-              }
-              L.lam(f(tdba)(CtxS[Type, E, A](ctxi, tA))(L))
-            }
+        f: TDB[Type, P, A] => TDB[Type, P, B]
+    )(implicit tA: Type[A], tB: Type[B]): TDB[Type, P, A => B] =
+      new TDB[Type, P, A => B] {
+        def apply[E](ctxi: Ctx[Type, E]): P[E, A => B] = {
+          val tdba: TDB[Type, P, A] = new TDB[Type, P, A] {
+            def apply[E1](ctxj: Ctx[Type, E1]): P[E1, A] =
+              Ctx.tshift[Type, A, E, E1, P](ctxj, CtxS[Type, E, A](ctxi, tA))
           }
+          L.lam(f(tdba)(CtxS[Type, E, A](ctxi, tA)))
+        }
       }
 
-    def app[A: Type, B: Type](f: TDB[Type, A => B])(t1: TDB[Type, A]): TDB[Type, B] =
-      new TDB[Type, B] {
-        def apply[E](ctx: Ctx[Type, E]): ChurchDB[Type, E, B] =
-          new ChurchDB[Type, E, B] {
-            def apply[P[_, _]](implicit L: tfdb.Lambda[Type, P]) =
-              L.app(f(ctx)(L))(t1(ctx)(L))
-          }
+    def app[A: Type, B: Type](f: TDB[Type, P, A => B])(t1: TDB[Type, P, A]): TDB[Type, P, B] =
+      new TDB[Type, P, B] {
+        def apply[E](ctx: Ctx[Type, E]): P[E, B] =
+          L.app(f(ctx))(t1(ctx))
       }
   }
 
