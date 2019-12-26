@@ -16,7 +16,7 @@ object Lambda {
   implicit def _Serializer[Type[_]: ArrowType: TreeSerializable] = new semantics.Serializer[Type]
   implicit def _Show[Type[_]: ArrowType]                         = new semantics.ShowLambda[Type]
   implicit def _Standard[Type[_]: ArrowType]                     = new semantics.Standard[Type]
-
+  implicit def _TDBLambda[Type[_]: ArrowType: safecast.Cast]     = new semantics.TDB.TDB_Hoas[Type]
   import semantics.GenLambda._
 
   implicit def _IsoHOAS[Type[_]: ArrowType, P[_]](

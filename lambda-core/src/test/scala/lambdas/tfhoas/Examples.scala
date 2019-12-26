@@ -21,4 +21,8 @@ case class Examples[Type[_]: ArrowType: IntType, P[_]]()(
     lam { f =>
       A.add(app(f)(int(1.bd)))(int(2.bd))
     }
+
+  def ex2: P[(Num => Num) => Num => Num] =
+    lam((f: P[Num => Num]) => lam((n: P[Num]) => app(f)(n)))
+
 }
