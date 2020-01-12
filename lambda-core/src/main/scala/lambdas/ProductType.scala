@@ -71,12 +71,12 @@ trait ProductTypeDeserialization extends ProductTypeDeserializationLPI {
 
   type Match[T[_]] = safecast.Match[T, Case[T, ?]]
 
-  implicit def ProductTypeCast[T[_]: ProductType](implicit IsArrow: Match[T]) =
+  implicit def ProductTypeCast[T[_]: ProductType](implicit IsProduct: Match[T]) =
     new ProductType[Cast.As[T, ?]] {
       def tProduct[T0, T1](t0: Cast.As[T, T0], t1: Cast.As[T, T1]) = new Cast.As[T, (T0, T1)] {
         def apply[T2](t2: T[T2]): Option[(T0, T1) Is T2] =
           for {
-            result <- IsArrow.unapply(t2)
+            result <- IsProduct.unapply(t2)
             eqT0   <- t0(result.t1)
             eqT1   <- t1(result.t2)
           } yield (eqT0, eqT1).lift2[Tuple2].andThen(result.is.flip)

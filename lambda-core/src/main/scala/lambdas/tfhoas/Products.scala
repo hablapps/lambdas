@@ -1,7 +1,7 @@
 package lambdas
 package tfhoas
 
-abstract class Products[P[_]] extends Serializable {
+trait Products[P[_]] extends Serializable {
   def tuple[A, B](a: P[A], b: P[B]): P[(A, B)]
 
   def fst[A, B](t: P[(A, B)]): P[A]

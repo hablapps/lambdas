@@ -3,12 +3,13 @@ package lambdas
 import arithmetic.{ IntType, Num }
 
 trait IntArrowType[A] {
-  def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[A]
+  def apply[T[_]](implicit I: IntType[T], R: ArrowType[T], P: ProductType[T]): T[A]
 }
 
 object IntArrowType
     extends IntArrowTypeInstances
     with IntType.Implicits[IntArrowType]
+    with ProductType.Implicits[IntArrowType]
     with ArrowType.Implicits[IntArrowType]
     with IntArrowTypeDeserialization
     with IntArrowTypeSerialization
@@ -18,7 +19,7 @@ trait IntArrowTypeInstances {
 
   implicit val _IntType = new IntType[IntArrowType] {
     def tint: IntArrowType[Num] = new IntArrowType[Num] {
-      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[Num] =
+      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T], P: ProductType[T]): T[Num] =
         I.tint
     }
   }
@@ -28,8 +29,18 @@ trait IntArrowTypeInstances {
         t1: IntArrowType[T1],
         t2: IntArrowType[T2]
     ): IntArrowType[T1 => T2] = new IntArrowType[T1 => T2] {
-      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T]): T[T1 => T2] =
-        R.tarrow(t1(I, R), t2(I, R))
+      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T], P: ProductType[T]): T[T1 => T2] =
+        R.tarrow(t1(I, R, P), t2(I, R, P))
+    }
+  }
+
+  implicit val _ProductType = new ProductType[IntArrowType] {
+    def tProduct[T1, T2](
+        t1: IntArrowType[T1],
+        t2: IntArrowType[T2]
+    ): IntArrowType[(T1, T2)] = new IntArrowType[(T1, T2)] {
+      def apply[T[_]](implicit I: IntType[T], R: ArrowType[T], P: ProductType[T]): T[(T1, T2)] =
+        P.tProduct(t1(I, R, P), t2(I, R, P))
     }
   }
 }
@@ -44,6 +55,11 @@ trait IntArrowTypeDeserialization {
   implicit val ArrowTypeMatch = new ArrowType.Arrow1.Match[IntArrowType] {
     def unapply[A](t: IntArrowType[A]): Option[ArrowType.Arrow1.Case[IntArrowType, A]] =
       t[λ[T => (IntArrowType[T], Option[ArrowType.Arrow1.Case[IntArrowType, T]])]]._2
+  }
+
+  implicit val ProductTypeMatch = new ProductType.Match[IntArrowType] {
+    def unapply[A](t: IntArrowType[A]): Option[ProductType.Case[IntArrowType, A]] =
+      t[λ[T => (IntArrowType[T], Option[ProductType.Case[IntArrowType, T]])]]._2
   }
 
   import safecast._
